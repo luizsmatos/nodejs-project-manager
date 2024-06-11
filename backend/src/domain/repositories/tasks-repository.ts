@@ -7,6 +7,7 @@ export interface TasksRepository {
     projectId: string,
     pagination: PaginationParams,
   ): Promise<Task[]>
+  delete(task: Task): Promise<void>
   save(task: Task): Promise<void>
   create(task: Task): Promise<void>
 }

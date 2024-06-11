@@ -31,4 +31,8 @@ export class InMemoryProjectsRepository implements ProjectsRepository {
 
     this.items[index] = project
   }
+
+  async delete(project: Project): Promise<void> {
+    this.items = this.items.filter((item) => item.id !== project.id)
+  }
 }

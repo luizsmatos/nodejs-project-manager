@@ -9,7 +9,7 @@ export function makeTask(override: Partial<Task> = {}): Task {
     title: faker.person.fullName(),
     description: faker.lorem.paragraph(),
     status: TaskStatus.PENDING,
-    completedBy: faker.string.uuid(),
+    completedBy: null,
     completedAt: null,
     createdAt: faker.date.past(),
     updatedAt: null,

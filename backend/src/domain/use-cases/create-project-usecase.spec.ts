@@ -7,7 +7,7 @@ import { faker } from '@faker-js/faker'
 let sut: CreateProjectUseCase
 let inMemoryProjectsRepository: InMemoryProjectsRepository
 
-describe('List User Projects UseCase', () => {
+describe('Create Project UseCase', () => {
   beforeEach(() => {
     inMemoryProjectsRepository = new InMemoryProjectsRepository()
     sut = new CreateProjectUseCase(inMemoryProjectsRepository)

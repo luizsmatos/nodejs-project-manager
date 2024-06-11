@@ -1,7 +1,8 @@
 import { InMemoryProjectsRepository } from '#/repositories/in-memory-projects-repository'
-import { ListUserProjectsUseCase } from './list-user-projects-usecase'
 import { makeProject } from '#/factories/make-project'
 import { makeUser } from '#/factories/make-user'
+
+import { ListUserProjectsUseCase } from './list-user-projects-usecase'
 
 let sut: ListUserProjectsUseCase
 let inMemoryProjectsRepository: InMemoryProjectsRepository

@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import { HttpError } from 'http-errors'
+import z, { ZodError } from 'zod'
+import { errorMap, fromError } from 'zod-validation-error'
+
+z.setErrorMap(errorMap)
 
 type BodyResponse = { status: number; error: string; message: string }
 type ErrorResponse = [boolean, BodyResponse?]
@@ -19,6 +23,20 @@ function checkHttpError(err: Error): ErrorResponse {
   return [false]
 }
 
+function checkZodError(err: Error): ErrorResponse {
+  if (err instanceof ZodError) {
+    return [
+      true,
+      {
+        status: 400,
+        error: err.constructor.name,
+        message: fromError(err).toString(),
+      },
+    ]
+  }
+  return [false]
+}
+
 export function errorHandler(
   err: Error,
   _request: Request,
@@ -30,6 +48,7 @@ export function errorHandler(
   let body: BodyResponse | undefined
 
   if (!treated) [treated, body] = checkHttpError(err)
+  if (!treated) [treated, body] = checkZodError(err)
 
   if (treated && body) {
     return response.status(body.status).json({

@@ -8,5 +8,6 @@ export interface ProjectsRepository {
     userId: string,
     pagination: PaginationParams,
   ): Promise<Project[]>
+  save(project: Project): Promise<void>
   create(project: Project): Promise<void>
 }

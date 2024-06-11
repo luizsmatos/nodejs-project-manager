@@ -9,7 +9,7 @@ export interface Task {
   title: string
   description: string
   status: TaskStatus
-  completedBy: string
+  completedBy: string | null
   completedAt: Date | null
   createdAt: Date
   updatedAt: Date | null

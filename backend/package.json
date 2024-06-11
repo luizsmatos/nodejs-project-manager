@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tsup tsup src --clean",
+    "build": "tsup src --clean",
     "start": "node --watch dist/infra/http/main.js",
     "start:dev": "tsx watch src/infra/http/main.ts",
     "test": "vitest run",

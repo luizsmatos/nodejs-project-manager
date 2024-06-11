@@ -5,6 +5,12 @@ import { TasksRepository } from '@/domain/repositories/tasks-repository'
 export class InMemoryTasksRepository implements TasksRepository {
   public items: Task[] = []
 
+  async findById(taskId: string): Promise<Task | null> {
+    const task = this.items.find((item) => item.id === taskId)
+
+    return task ?? null
+  }
+
   async findManyByProjectId(
     projectId: string,
     { page }: PaginationParams,
@@ -14,6 +20,12 @@ export class InMemoryTasksRepository implements TasksRepository {
       .slice((page - 1) * 20, page * 20)
 
     return tasks
+  }
+
+  async save(task: Task): Promise<void> {
+    const index = this.items.findIndex((item) => item.id === task.id)
+
+    this.items[index] = task
   }
 
   async create(task: Task): Promise<void> {

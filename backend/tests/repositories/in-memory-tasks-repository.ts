@@ -15,4 +15,8 @@ export class InMemoryTasksRepository implements TasksRepository {
 
     return tasks
   }
+
+  async create(task: Task): Promise<void> {
+    this.items.push(task)
+  }
 }

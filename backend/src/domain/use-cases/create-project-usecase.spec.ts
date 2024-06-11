@@ -1,8 +1,9 @@
+import { faker } from '@faker-js/faker'
+
 import { InMemoryProjectsRepository } from '#/repositories/in-memory-projects-repository'
 import { makeUser } from '#/factories/make-user'
 
 import { CreateProjectUseCase } from './create-project-usecase'
-import { faker } from '@faker-js/faker'
 
 let sut: CreateProjectUseCase
 let inMemoryProjectsRepository: InMemoryProjectsRepository

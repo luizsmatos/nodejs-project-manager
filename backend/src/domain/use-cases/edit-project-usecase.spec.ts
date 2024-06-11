@@ -56,7 +56,7 @@ describe('Edit Project UseCase', () => {
     ).rejects.toEqual(new ProjectNotFoundError())
   })
 
-  it("should not be able to edit an expense if it doesn't belong to the user", async () => {
+  it("should not be able to edit an project if it doesn't belong to the user", async () => {
     const project = makeProject()
 
     await inMemoryProjectsRepository.create(project)

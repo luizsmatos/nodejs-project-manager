@@ -7,4 +7,5 @@ export interface ProjectsRepository {
     userId: string,
     pagination: PaginationParams,
   ): Promise<Project[]>
+  create(project: Project): Promise<void>
 }

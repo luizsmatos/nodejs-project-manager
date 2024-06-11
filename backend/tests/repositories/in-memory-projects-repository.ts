@@ -15,4 +15,8 @@ export class InMemoryProjectsRepository implements ProjectsRepository {
 
     return projects
   }
+
+  async create(project: Project): Promise<void> {
+    this.items.push(project)
+  }
 }

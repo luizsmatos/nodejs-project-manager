@@ -1,14 +1,14 @@
 import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu'
 import { ChevronDown, LogOut, UserCog } from 'lucide-react'
 
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu'
+} from '../ui/dropdown-menu'
 
 export function AccountMenu() {
   return (

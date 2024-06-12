@@ -1,10 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { authenticateUser } from '@/api/authenticate-user'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -25,9 +27,13 @@ export function Login() {
     resolver: zodResolver(loginFormSchema),
   })
 
+  const { mutateAsync: authenticateUserFn } = useMutation({
+    mutationFn: authenticateUser,
+  })
+
   async function handleLogin(data: LoginFormSchema) {
     try {
-      console.log(data)
+      await authenticateUserFn({ email: data.email, password: data.password })
 
       toast.success('Login efetuado com sucesso!')
     } catch (error) {

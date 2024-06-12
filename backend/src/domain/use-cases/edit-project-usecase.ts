@@ -6,8 +6,8 @@ import { UserNotAuthorizedError } from './errors/user-not-authorized-error'
 interface EditProjectUseCaseRequest {
   userId: string
   projectId: string
-  name: string
-  description: string
+  name?: string
+  description?: string
 }
 
 interface EditProjectUseCaseResponse {
@@ -33,8 +33,8 @@ export class EditProjectUseCase {
       throw new UserNotAuthorizedError()
     }
 
-    project.name = name
-    project.description = description
+    project.name = name ?? project.name
+    project.description = description ?? project.description
     project.updatedAt = new Date()
 
     await this.projectsRepository.save(project)

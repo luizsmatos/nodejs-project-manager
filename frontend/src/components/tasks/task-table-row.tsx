@@ -9,6 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../ui/tooltip'
+import { DeleteTask } from './delete-task'
 import { EditTask } from './edit-task'
 
 export function TaskTableRow() {
@@ -28,30 +29,50 @@ export function TaskTableRow() {
         </div>
       </TableCell>
       <TableCell className="text-muted-foreground">12/09/2021</TableCell>
-      <TableCell>
+      <TableCell className="flex items-center">
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline" size="xs" className="mr-1">
-              <FilePenLine className="h-3 w-3" />
-              <span className="sr-only">Editar tarefa</span>
-            </Button>
+            <div>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="outline" size="xs" className="mr-1">
+                      <FilePenLine className="h-3 w-3" />
+                      <span className="sr-only">Editar tarefa</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Editar tarefa</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </DialogTrigger>
 
           <EditTask />
         </Dialog>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="outline" size="xs" className="mr-1">
-                <FileX2 className="h-3 w-3" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Excluir tarefa</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Dialog>
+          <DialogTrigger asChild>
+            <div>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="outline" size="xs" className="mr-1">
+                      <FileX2 className="h-3 w-3" />
+                      <span className="sr-only">Excluir tarefa</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Excluir tarefa</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </DialogTrigger>
+
+          <DeleteTask />
+        </Dialog>
       </TableCell>
     </TableRow>
   )

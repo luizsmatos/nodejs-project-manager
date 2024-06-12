@@ -5,7 +5,7 @@ import { errorMap, fromError } from 'zod-validation-error'
 
 z.setErrorMap(errorMap)
 
-type BodyResponse = { status: number; error: string; message: string }
+type BodyResponse = { status: number; error: string; message: unknown }
 type ErrorResponse = [boolean, BodyResponse?]
 
 function checkHttpError(err: Error): ErrorResponse {
@@ -30,7 +30,7 @@ function checkZodError(err: Error): ErrorResponse {
       {
         status: 400,
         error: err.constructor.name,
-        message: fromError(err).toString(),
+        message: fromError(err),
       },
     ]
   }

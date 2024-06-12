@@ -26,9 +26,13 @@ export function Login() {
   })
 
   async function handleLogin(data: LoginFormSchema) {
-    console.log(data)
+    try {
+      console.log(data)
 
-    toast.success('Seja bem-vindo!')
+      toast.success('Login efetuado com sucesso!')
+    } catch (error) {
+      toast.error('Credenciais inválidas.')
+    }
   }
 
   return (
@@ -47,12 +51,12 @@ export function Login() {
 
           <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
             <div>
-              <Label htmlFor="email">E-mail</Label>
+              <Label htmlFor="email">Seu e-mail</Label>
               <Input id="email" type="email" {...register('email')} />
             </div>
 
             <div>
-              <Label htmlFor="password">Senha</Label>
+              <Label htmlFor="password">Sua senha</Label>
               <Input id="password" type="password" {...register('password')} />
             </div>
 

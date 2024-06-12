@@ -1,10 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { registerUser } from '@/api/register-user'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -28,9 +30,17 @@ export function Register() {
     resolver: zodResolver(registerFormSchema),
   })
 
+  const { mutateAsync: registerUserFn } = useMutation({
+    mutationFn: registerUser,
+  })
+
   async function handleRegister(data: RegisterFormSchema) {
     try {
-      console.log(data)
+      await registerUserFn({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      })
 
       toast.success('Conta criada com sucesso!', {
         action: {

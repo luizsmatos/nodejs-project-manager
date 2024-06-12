@@ -1,6 +1,6 @@
 import { ListTodo } from 'lucide-react'
 
-import { AccountMenu } from './account-menu'
+import { AccountMenu } from './account/account-menu'
 import { ThemeToggle } from './theme/theme-toggle'
 import { Separator } from './ui/separator'
 

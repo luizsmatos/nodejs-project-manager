@@ -4,9 +4,9 @@ import { TaskNotFoundError } from './errors/task-not-found-error'
 
 interface EditTaskUseCaseRequest {
   taskId: string
-  title: string
-  description: string
-  status: TaskStatus
+  title?: string
+  description?: string
+  status?: TaskStatus
   completedBy?: string
 }
 
@@ -30,9 +30,9 @@ export class EditTaskUseCase {
       throw new TaskNotFoundError()
     }
 
-    task.title = title
-    task.description = description
-    task.status = status
+    task.title = title ?? task.title
+    task.description = description ?? task.description
+    task.status = status ?? task.status
     task.completedBy = completedBy ?? null
     task.completedAt = completedBy ? new Date() : null
     task.updatedAt = new Date()

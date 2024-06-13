@@ -6,9 +6,18 @@ interface EditProjectBody {
   project: ProjectDTO
 }
 
+interface EditProjectResponse {
+  project: ProjectDTO
+}
+
 export async function editProject({ project }: EditProjectBody) {
-  await api.put<EditProjectBody>(`/projects/${project.id}`, {
-    name: project.name,
-    description: project.description,
-  })
+  const response = await api.put<EditProjectResponse>(
+    `/projects/${project.id}`,
+    {
+      name: project.name,
+      description: project.description,
+    },
+  )
+
+  return response.data.project
 }

@@ -29,6 +29,9 @@ export class PrismaProjectsRepository implements ProjectsRepository {
       },
       skip: (page - 1) * 20,
       take: page * 20,
+      orderBy: {
+        createdAt: 'asc',
+      },
     })
 
     return projects.map((project) => PrismaProjectMapper.toDomain(project))

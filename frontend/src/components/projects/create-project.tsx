@@ -1,6 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
+
+import { createProject } from '@/api/create-project'
+import { ProjectDTO } from '@/api/dtos/project-dto'
 
 import { Button } from '../ui/button'
 import {
@@ -15,20 +20,49 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
 
-const createProductSchema = z.object({
+const createProjectSchema = z.object({
   name: z.string().min(3),
   description: z.string().min(3).max(191),
 })
 
-type CreateProjectSchema = z.infer<typeof createProductSchema>
+type CreateProjectSchema = z.infer<typeof createProjectSchema>
 
 export function CreateProject() {
-  const { register, handleSubmit } = useForm<CreateProjectSchema>({
-    resolver: zodResolver(createProductSchema),
+  const queryClient = useQueryClient()
+
+  const { mutateAsync: createProjectFn } = useMutation({
+    mutationFn: createProject,
+    onSuccess(newProject) {
+      const cached = queryClient.getQueryData<ProjectDTO[]>(['projects'])
+
+      if (cached) {
+        queryClient.setQueryData<ProjectDTO[]>(
+          ['projects'],
+          [...cached, newProject],
+        )
+      }
+    },
   })
 
-  function handleCreateProject(data: CreateProjectSchema) {
-    console.log(data)
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<CreateProjectSchema>({
+    resolver: zodResolver(createProjectSchema),
+  })
+
+  async function handleCreateProject(data: CreateProjectSchema) {
+    try {
+      await createProjectFn({
+        name: data.name,
+        description: data.description,
+      })
+
+      toast.success('Projeto criado com sucesso!')
+    } catch {
+      toast.error('Falha ao criar o projeto, tente novamente!')
+    }
   }
 
   return (
@@ -62,7 +96,9 @@ export function CreateProject() {
             </Button>
           </DialogClose>
 
-          <Button type="submit">Salvar</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            Salvar
+          </Button>
         </DialogFooter>
       </form>
     </DialogContent>

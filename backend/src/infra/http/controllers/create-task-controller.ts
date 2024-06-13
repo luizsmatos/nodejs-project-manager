@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
 import { makeCreateTaskUseCase } from '@/domain/use-cases/factories/make-create-task-usecase'
+import { TaskStatus } from '@/domain/entities/task'
 
 export async function createTaskController(
   request: Request,
@@ -15,15 +16,20 @@ export async function createTaskController(
   const createTaskBodySchema = z.object({
     title: z.string().min(3),
     description: z.string().min(3).max(191),
+    status: z.nativeEnum(TaskStatus),
   })
 
-  const { title, description } = createTaskBodySchema.parse(request.body)
+  const { title, description, status } = createTaskBodySchema.parse(
+    request.body,
+  )
 
   const createTaskUseCase = makeCreateTaskUseCase()
   const result = await createTaskUseCase.execute({
     projectId,
     title,
     description,
+    status,
+    userId: request.user.id,
   })
 
   const { task } = result

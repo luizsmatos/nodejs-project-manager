@@ -17,6 +17,7 @@ export function AccountMenu() {
   const { data: profile } = useQuery({
     queryKey: ['user-profile'],
     queryFn: getUserProfile,
+    staleTime: Infinity,
   })
 
   return (

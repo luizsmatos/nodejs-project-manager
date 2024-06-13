@@ -1,14 +1,9 @@
 import { api } from '@/lib/axios'
 
-interface ListUserProjectsResponse {
-  projects: {
-    id: string
-    name: string
-    description: string
-    userId: string
-    createdAt: string
-    updatedAt: string | null
-  }[]
+import { ProjectDTO } from './dtos/project-dto'
+
+export interface ListUserProjectsResponse {
+  projects: ProjectDTO[]
 }
 
 export async function listUserProjects() {

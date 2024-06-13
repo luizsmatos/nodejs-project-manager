@@ -10,16 +10,14 @@ export async function verifyJwt(
   _response: Response,
   next: NextFunction,
 ) {
-  const authHeader = request.headers.authorization
+  const accessToken = request.cookies.access_token
 
-  if (!authHeader) {
+  if (!accessToken) {
     throw new Unauthorized()
   }
 
   try {
-    const [, token] = authHeader.split(' ')
-
-    const decoded = jwt.verify(token, env.JWT_SECRET) as { sub: string }
+    const decoded = jwt.verify(accessToken, env.JWT_SECRET) as { sub: string }
 
     const usersRepository = new PrismaUsersRepository()
     const user = await usersRepository.findById(decoded.sub)

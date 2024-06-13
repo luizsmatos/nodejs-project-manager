@@ -6,9 +6,10 @@ import {
   Table,
   TrashIcon,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import { listUserProjects } from '@/api/list-user-projects'
+import { ProjectContext } from '@/context/project-context'
 
 import { Button } from '../ui/button'
 import { Dialog, DialogTrigger } from '../ui/dialog'
@@ -30,6 +31,7 @@ enum DialogType {
 }
 
 export function Projects() {
+  const { selectedProject, setSelectedProject } = useContext(ProjectContext)
   const [dialogType, setDialogType] = useState<DialogType | null>(null)
 
   const { data: projects, isLoading: isLoadingProjects } = useQuery({
@@ -37,6 +39,12 @@ export function Projects() {
     queryFn: listUserProjects,
     staleTime: Infinity,
   })
+
+  useEffect(() => {
+    if (projects && projects.length > 0) {
+      setSelectedProject(projects[0])
+    }
+  }, [projects, setSelectedProject])
 
   return (
     <div className="flex flex-col gap-6">
@@ -65,7 +73,15 @@ export function Projects() {
             projects?.map((project) => (
               <li key={project.id}>
                 <div className="flex items-center justify-between p-0.5">
-                  <Button variant="ghost" className={`w-full justify-start`}>
+                  <Button
+                    variant="ghost"
+                    className={`w-full justify-start text-gray-600 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 ${
+                      selectedProject?.id === project.id
+                        ? 'bg-gray-200 dark:bg-gray-700'
+                        : ''
+                    }`}
+                    onClick={() => setSelectedProject(project)}
+                  >
                     <Table className="mr-2 h-4 w-4" />
                     {project.name}
                   </Button>

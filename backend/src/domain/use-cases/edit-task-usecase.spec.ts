@@ -32,7 +32,7 @@ describe('Edit Task UseCase', () => {
       taskId: task.id,
       title: updateTitle,
       description: updateDescription,
-      status: TaskStatus.COMPLETED,
+      status: TaskStatus.DONE,
       completedBy: user.id,
     })
 

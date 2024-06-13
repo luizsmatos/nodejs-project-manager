@@ -5,11 +5,11 @@ import { app } from '../app'
 
 describe('Edit Project Controller (e2e)', () => {
   it('should return 200 on success', async () => {
-    const { accessToken } = await createAndAuthenticateUser(app)
+    const { cookies } = await createAndAuthenticateUser(app)
 
     const createProject = await request(app)
       .post('/projects')
-      .set('Authorization', `Bearer ${accessToken}`)
+      .set('Cookie', cookies)
       .send({
         name: faker.lorem.word(5),
         description: faker.lorem.paragraph(),
@@ -22,7 +22,7 @@ describe('Edit Project Controller (e2e)', () => {
 
     const response = await request(app)
       .put(`/projects/${projectId}`)
-      .set('Authorization', `Bearer ${accessToken}`)
+      .set('Cookie', cookies)
       .send({
         name: updateName,
         description: updateDescription,

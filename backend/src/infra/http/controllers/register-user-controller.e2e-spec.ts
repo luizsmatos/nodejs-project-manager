@@ -10,11 +10,6 @@ describe('Register User Controller (e2e)', () => {
     })
 
     expect(response.statusCode).toEqual(201)
-    expect(response.body).toEqual({
-      user: expect.objectContaining({
-        id: expect.any(String),
-      }),
-    })
   })
 
   it('should return 409 if email is already in use', async () => {

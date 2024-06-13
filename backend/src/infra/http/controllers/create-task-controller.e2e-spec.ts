@@ -5,11 +5,11 @@ import { app } from '../app'
 
 describe('Create Task Controller (e2e)', () => {
   it('should return 201 on success', async () => {
-    const { accessToken } = await createAndAuthenticateUser(app)
+    const { cookies } = await createAndAuthenticateUser(app)
 
     const createProject = await request(app)
       .post('/projects')
-      .set('Authorization', `Bearer ${accessToken}`)
+      .set('Cookie', cookies)
       .send({
         name: faker.lorem.word(5),
         description: faker.lorem.paragraph(),
@@ -19,7 +19,7 @@ describe('Create Task Controller (e2e)', () => {
 
     const response = await request(app)
       .post(`/projects/${projectId}/tasks`)
-      .set('Authorization', `Bearer ${accessToken}`)
+      .set('Cookie', cookies)
       .send({
         title: faker.lorem.word(5),
         description: faker.lorem.paragraph(),

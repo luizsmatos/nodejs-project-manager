@@ -5,11 +5,11 @@ import { app } from '../app'
 
 describe('List User Projects Controller (e2e)', () => {
   it('should return 200 on success', async () => {
-    const { accessToken } = await createAndAuthenticateUser(app)
+    const { cookies } = await createAndAuthenticateUser(app)
 
     await request(app)
       .post('/projects')
-      .set('Authorization', `Bearer ${accessToken}`)
+      .set('Cookie', cookies)
       .send({
         name: faker.lorem.word(5),
         description: faker.lorem.paragraph(),
@@ -17,7 +17,7 @@ describe('List User Projects Controller (e2e)', () => {
 
     await request(app)
       .post('/projects')
-      .set('Authorization', `Bearer ${accessToken}`)
+      .set('Cookie', cookies)
       .send({
         name: faker.lorem.word(5),
         description: faker.lorem.paragraph(),
@@ -25,7 +25,7 @@ describe('List User Projects Controller (e2e)', () => {
 
     const response = await request(app)
       .get('/projects')
-      .set('Authorization', `Bearer ${accessToken}`)
+      .set('Cookie', cookies)
       .send()
 
     expect(response.statusCode).toEqual(200)

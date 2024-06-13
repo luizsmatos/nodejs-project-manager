@@ -1,11 +1,9 @@
 import { api } from '@/lib/axios'
 
+import { UserDTO } from './dtos/user-dto'
+
 interface GetUserProfileResponse {
-  user: {
-    id: string
-    name: string
-    email: string
-  }
+  user: UserDTO
 }
 
 export async function getUserProfile() {

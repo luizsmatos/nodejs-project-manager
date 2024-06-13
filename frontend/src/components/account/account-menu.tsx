@@ -1,5 +1,7 @@
-import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu'
+import { useQuery } from '@tanstack/react-query'
 import { ChevronDown, LogOut, UserCog } from 'lucide-react'
+
+import { getUserProfile } from '@/api/get-user-profile'
 
 import { Button } from '../ui/button'
 import {
@@ -7,10 +9,16 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
 
 export function AccountMenu() {
+  const { data: profile } = useQuery({
+    queryKey: ['user-profile'],
+    queryFn: getUserProfile,
+  })
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -24,9 +32,9 @@ export function AccountMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="flex flex-col">
-          <span>Luiz Gustavo</span>
+          <span>{profile?.name}</span>
           <span className="text-xs font-normal text-muted-foreground">
-            luiz.matos@gmail.com
+            {profile?.email}
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

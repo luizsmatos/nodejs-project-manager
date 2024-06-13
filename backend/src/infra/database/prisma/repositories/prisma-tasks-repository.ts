@@ -29,6 +29,9 @@ export class PrismaTasksRepository implements TasksRepository {
       },
       skip: (page - 1) * 20,
       take: page * 20,
+      orderBy: {
+        createdAt: 'asc',
+      },
     })
 
     return tasks.map((task) => PrismaTaskMapper.toDomain(task))

@@ -2,6 +2,8 @@ import { Router } from 'express'
 
 import { authenticateUserController } from '../controllers/authenticate-user-controller'
 import { registerUserController } from '../controllers/register-user-controller'
+import { getUserProfileController } from '../controllers/get-user-profile-controller'
+import { verifyJwt } from '../middlewares/verify-jwt'
 
 const usersRouter = Router()
 
@@ -12,5 +14,6 @@ usersRouter.post('/auth/logout', (_request, response) => {
 
   return response.send()
 })
+usersRouter.get('/users/me', verifyJwt, getUserProfileController)
 
 export { usersRouter }

@@ -14,8 +14,12 @@ describe('Authenticate User Controller (e2e)', () => {
       password: '123456',
     })
 
+    const cookies = response.headers['set-cookie']
+
     expect(response.statusCode).toEqual(200)
-    expect(response.body).toEqual({ accessToken: expect.any(String) })
+    expect(cookies).toEqual(
+      expect.arrayContaining([expect.stringContaining('access_token')]),
+    )
   })
 
   it('should return 401 if email is not found', async () => {

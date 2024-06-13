@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -19,6 +19,8 @@ const loginFormSchema = z.object({
 type LoginFormSchema = z.infer<typeof loginFormSchema>
 
 export function Login() {
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -34,8 +36,9 @@ export function Login() {
   async function handleLogin(data: LoginFormSchema) {
     try {
       await authenticateUserFn({ email: data.email, password: data.password })
-
       toast.success('Login efetuado com sucesso!')
+
+      navigate('/')
     } catch (error) {
       toast.error('Credenciais inválidas.')
     }

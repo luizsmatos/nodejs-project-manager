@@ -3,21 +3,20 @@ import { api } from '@/lib/axios'
 import { ProjectDTO } from './dtos/project-dto'
 
 interface EditProjectBody {
-  project: ProjectDTO
+  id: string
+  name: string
+  description: string
 }
 
 interface EditProjectResponse {
   project: ProjectDTO
 }
 
-export async function editProject({ project }: EditProjectBody) {
-  const response = await api.put<EditProjectResponse>(
-    `/projects/${project.id}`,
-    {
-      name: project.name,
-      description: project.description,
-    },
-  )
+export async function editProject({ id, name, description }: EditProjectBody) {
+  const response = await api.put<EditProjectResponse>(`/projects/${id}`, {
+    name,
+    description,
+  })
 
   return response.data.project
 }

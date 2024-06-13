@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
 import { makeRegisterUserUseCase } from '@/domain/use-cases/factories/make-register-user-usecase'
-import { UserPresenter } from './presenters/user-presenter'
 
 export async function registerUserController(
   request: Request,
@@ -16,15 +15,11 @@ export async function registerUserController(
   const { name, email, password } = registerBodySchema.parse(request.body)
 
   const registerUserUseCase = makeRegisterUserUseCase()
-  const result = await registerUserUseCase.execute({
+  await registerUserUseCase.execute({
     name,
     email,
     password,
   })
 
-  const { user } = result
-
-  return response.status(201).json({
-    user: UserPresenter.toHTTP(user),
-  })
+  return response.status(201).send()
 }

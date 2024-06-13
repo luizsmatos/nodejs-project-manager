@@ -1,5 +1,6 @@
 import 'express-async-errors'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 import express from 'express'
 import helmet from 'helmet'
 
@@ -12,7 +13,15 @@ const app = express()
 
 app.use(helmet())
 
-app.use(cors())
+app.use(cookieParser())
+
+app.use(
+  cors({
+    credentials: true,
+    allowedHeaders: ['Content-Type'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  }),
+)
 app.options('*', cors())
 
 app.use(express.json())

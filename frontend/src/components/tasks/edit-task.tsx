@@ -1,8 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
+import { z } from 'zod'
 
 import { TaskDTO } from '@/api/dtos/task-dto'
 import { editTask } from '@/api/edit-task'
+import { ListProjectTasksResponse } from '@/api/list-project-tasks'
 
 import {
   DialogContent,
@@ -17,20 +20,25 @@ interface EditTaskProps {
 }
 
 export function EditTask({ task }: EditTaskProps) {
+  const [searchParams] = useSearchParams()
+  const page = z.coerce.number().parse(searchParams.get('page') ?? 1)
+
   const queryClient = useQueryClient()
 
   const { mutateAsync: editTaskFn } = useMutation({
     mutationFn: editTask,
     onSuccess(updatedTask) {
-      const keys = ['tasks', { projectId: task.projectId }]
-      const cached = queryClient.getQueryData<TaskDTO[]>(keys)
+      const keys = ['tasks', task.projectId, page]
+      const previousTasks =
+        queryClient.getQueryData<ListProjectTasksResponse>(keys)
 
-      if (cached) {
-        const updated = cached.map((item) =>
-          item.id === updatedTask.id ? updatedTask : item,
-        )
-
-        queryClient.setQueryData<TaskDTO[]>(keys, updated)
+      if (previousTasks) {
+        queryClient.setQueryData<ListProjectTasksResponse>(keys, {
+          ...previousTasks,
+          tasks: previousTasks.tasks.map((item) =>
+            item.id === updatedTask.id ? updatedTask : item,
+          ),
+        })
       }
     },
   })

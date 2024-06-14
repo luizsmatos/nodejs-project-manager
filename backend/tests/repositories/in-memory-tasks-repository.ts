@@ -1,6 +1,12 @@
-import { PaginationParams } from '@/core/types/pagination-params'
+import {
+  PaginationParams,
+  PaginationResponse,
+} from '@/core/types/pagination-params'
 import { Task } from '@/domain/entities/task'
-import { TasksRepository } from '@/domain/repositories/tasks-repository'
+import {
+  FindManyByProjectIdParams,
+  TasksRepository,
+} from '@/domain/repositories/tasks-repository'
 
 export class InMemoryTasksRepository implements TasksRepository {
   public items: Task[] = []
@@ -12,14 +18,38 @@ export class InMemoryTasksRepository implements TasksRepository {
   }
 
   async findManyByProjectId(
-    projectId: string,
+    { projectId, title, status }: FindManyByProjectIdParams,
     { page }: PaginationParams,
-  ): Promise<Task[]> {
+  ): Promise<PaginationResponse<Task>> {
+    const tasksCount = this.items.filter(
+      (item) => item.projectId === projectId,
+    ).length
     const tasks = this.items
       .filter((item) => item.projectId === projectId)
-      .slice((page - 1) * 20, page * 20)
+      .filter((item) => {
+        if (!title) {
+          return true
+        }
 
-    return tasks
+        return item.title.toLowerCase().includes(title.toLowerCase())
+      })
+      .filter((item) => {
+        if (!status) {
+          return true
+        }
+
+        return item.status === status
+      })
+      .slice((page - 1) * 10, page * 10)
+
+    return {
+      data: tasks,
+      meta: {
+        page,
+        perPage: 10,
+        totalCount: tasksCount,
+      },
+    }
   }
 
   async delete(task: Task): Promise<void> {

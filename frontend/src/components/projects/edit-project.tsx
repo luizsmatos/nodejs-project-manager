@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 
 import { ProjectDTO } from '@/api/dtos/project-dto'
 import { editProject } from '@/api/edit-project'
+import { ListUserProjectsResponse } from '@/api/list-user-projects'
 
 import {
   DialogContent,
@@ -22,14 +23,16 @@ export function EditProject({ project }: EditProjectProps) {
   const { mutateAsync: editProjectFn } = useMutation({
     mutationFn: editProject,
     onSuccess(updatedProject) {
-      const cached = queryClient.getQueryData<ProjectDTO[]>(['projects'])
+      const previousProjects =
+        queryClient.getQueryData<ListUserProjectsResponse>(['projects'])
 
-      if (cached) {
-        const updated = cached.map((item) =>
-          item.id === updatedProject.id ? updatedProject : item,
-        )
-
-        queryClient.setQueryData<ProjectDTO[]>(['projects'], updated)
+      if (previousProjects) {
+        queryClient.setQueryData<ListUserProjectsResponse>(['projects'], {
+          ...previousProjects,
+          projects: previousProjects.projects.map((item) =>
+            item.id === updatedProject.id ? updatedProject : item,
+          ),
+        })
       }
     },
   })

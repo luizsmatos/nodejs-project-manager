@@ -1,7 +1,12 @@
+import { Dialog, DialogTrigger } from '@radix-ui/react-dialog'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import { ClipboardIcon, FilePenLine, FileX2 } from 'lucide-react'
+import { useState } from 'react'
+
+import { TaskDTO } from '@/api/dtos/task-dto'
 
 import { Button } from '../ui/button'
-import { Dialog, DialogTrigger } from '../ui/dialog'
 import { TableCell, TableRow } from '../ui/table'
 import {
   Tooltip,
@@ -11,32 +16,50 @@ import {
 } from '../ui/tooltip'
 import { DeleteTask } from './delete-task'
 import { EditTask } from './edit-task'
+import { TaskStatus } from './task-status'
 
-export function TaskTableRow() {
+interface TaskItemProps {
+  task: TaskDTO
+}
+
+enum DialogType {
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE',
+}
+
+export function TaskItem({ task }: TaskItemProps) {
+  const [dialogType, setDialogType] = useState<DialogType | null>(null)
+
   return (
     <TableRow>
       <TableCell>
         <div className="flex items-center gap-2">
           <ClipboardIcon className="h-4 w-4 shrink-0" />
-          <div>Nova tarefa</div>
+          <div>{task.title}</div>
         </div>
       </TableCell>
-      <TableCell className="font-medium">Luiz Gustavo</TableCell>
+
+      <TableCell className="font-medium">{task.completedBy}</TableCell>
+
       <TableCell className="text-xs">
-        <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-slate-400" />
-          <span className="font-medium text-muted-foreground">Pendente</span>
-        </div>
+        <TaskStatus status={task.status} />
       </TableCell>
-      <TableCell className="text-muted-foreground">12/09/2021</TableCell>
-      <TableCell className="flex items-center">
+
+      <TableCell className="text-muted-foreground">
+        {format(task.createdAt, 'PP', { locale: ptBR })}
+      </TableCell>
+
+      <TableCell className="flex items-center gap-1">
         <Dialog>
-          <DialogTrigger asChild>
+          <DialogTrigger
+            asChild
+            onClick={() => setDialogType(DialogType.UPDATE)}
+          >
             <div>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="xs" className="mr-1">
+                    <Button variant="outline" size="xs">
                       <FilePenLine className="h-3 w-3" />
                       <span className="sr-only">Editar tarefa</span>
                     </Button>
@@ -49,16 +72,15 @@ export function TaskTableRow() {
             </div>
           </DialogTrigger>
 
-          <EditTask />
-        </Dialog>
-
-        <Dialog>
-          <DialogTrigger asChild>
+          <DialogTrigger
+            asChild
+            onClick={() => setDialogType(DialogType.DELETE)}
+          >
             <div>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="xs" className="mr-1">
+                    <Button variant="outline" size="xs">
                       <FileX2 className="h-3 w-3" />
                       <span className="sr-only">Excluir tarefa</span>
                     </Button>
@@ -71,7 +93,8 @@ export function TaskTableRow() {
             </div>
           </DialogTrigger>
 
-          <DeleteTask />
+          {dialogType === DialogType.UPDATE && <EditTask task={task} />}
+          {dialogType === DialogType.DELETE && <DeleteTask task={task} />}
         </Dialog>
       </TableCell>
     </TableRow>

@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { PlusIcon } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
+import { z } from 'zod'
 
 import { ProjectDTO } from '@/api/dtos/project-dto'
 import { listProjectTasks } from '@/api/list-project-tasks'
@@ -17,10 +19,21 @@ interface TasksProps {
 }
 
 export function Tasks({ project }: TasksProps) {
-  const { data: tasks } = useQuery({
-    queryKey: ['tasks', { projectId: project.id }],
-    queryFn: () => listProjectTasks({ projectId: project.id }),
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = z.coerce.number().parse(searchParams.get('page') ?? 1)
+
+  const { data: result } = useQuery({
+    queryKey: ['tasks', project.id, page],
+    queryFn: () => listProjectTasks({ projectId: project.id, page }),
   })
+
+  function handlePaginate(page: number) {
+    setSearchParams((prev) => {
+      prev.set('page', page.toString())
+
+      return prev
+    })
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -58,13 +71,22 @@ export function Tasks({ project }: TasksProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {tasks &&
-                tasks.map((task) => <TaskItem key={task.id} task={task} />)}
+              {result &&
+                result.tasks.map((task) => (
+                  <TaskItem key={task.id} task={task} />
+                ))}
             </TableBody>
           </Table>
         </div>
 
-        <Pagination pageIndex={0} totalCount={105} perPage={10} />
+        {result && (
+          <Pagination
+            page={result.meta.page}
+            totalCount={result.meta.totalCount}
+            perPage={result.meta.perPage}
+            onPageChange={handlePaginate}
+          />
+        )}
       </div>
     </div>
   )

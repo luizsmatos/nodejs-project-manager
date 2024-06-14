@@ -4,6 +4,7 @@ import { useContext, useEffect } from 'react'
 
 import { listUserProjects } from '@/api/list-user-projects'
 import { ProjectContext } from '@/context/project-context'
+import { useProjectQuery } from '@/hooks/use-project-query'
 
 import { Button } from '../ui/button'
 import { Dialog, DialogTrigger } from '../ui/dialog'
@@ -14,10 +15,11 @@ import { ProjectItem } from './project-item'
 
 export function Projects() {
   const { setSelectedProject } = useContext(ProjectContext)
+  const { name } = useProjectQuery()
 
   const { data: result, isLoading: isLoadingProjects } = useQuery({
-    queryKey: ['projects'],
-    queryFn: () => listUserProjects({}),
+    queryKey: ['projects', name],
+    queryFn: () => listUserProjects({ name }),
     staleTime: Infinity,
   })
 

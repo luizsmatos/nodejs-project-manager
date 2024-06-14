@@ -17,8 +17,6 @@ interface TaskDetailsProps {
 }
 
 export function TaskDetails({ task }: TaskDetailsProps) {
-  console.log(task)
-
   return (
     <>
       <DialogContent>

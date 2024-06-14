@@ -9,7 +9,7 @@ export function Dashboard() {
 
   return (
     <>
-      <Helmet title="Dashboard" />
+      <Helmet title={selectedProject?.name || 'Home'} />
       {selectedProject ? (
         <Tasks project={selectedProject} />
       ) : (

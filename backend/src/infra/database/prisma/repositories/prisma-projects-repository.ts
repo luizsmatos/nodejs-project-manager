@@ -1,6 +1,12 @@
-import { PaginationParams } from '@/core/types/pagination-params'
+import {
+  PaginationParams,
+  PaginationResponse,
+} from '@/core/types/pagination-params'
 import { Project } from '@/domain/entities/project'
-import { ProjectsRepository } from '@/domain/repositories/projects-repository'
+import {
+  FindManyByUserIdParams,
+  ProjectsRepository,
+} from '@/domain/repositories/projects-repository'
 import { prisma } from '../prisma'
 import { PrismaProjectMapper } from '../mappers/prisma-project-mapper'
 
@@ -20,21 +26,34 @@ export class PrismaProjectsRepository implements ProjectsRepository {
   }
 
   async findManyByUserId(
-    userId: string,
+    { userId, name }: FindManyByUserIdParams,
     { page }: PaginationParams,
-  ): Promise<Project[]> {
-    const projects = await prisma.project.findMany({
+  ): Promise<PaginationResponse<Project>> {
+    const projectsCount = prisma.project.count({ where: { userId } })
+    const projects = prisma.project.findMany({
       where: {
         userId,
+        name: {
+          contains: name,
+        },
       },
-      skip: (page - 1) * 20,
-      take: page * 20,
+      skip: (page - 1) * 10,
+      take: page * 10,
       orderBy: {
         createdAt: 'asc',
       },
     })
 
-    return projects.map((project) => PrismaProjectMapper.toDomain(project))
+    const [total, data] = await prisma.$transaction([projectsCount, projects])
+
+    return {
+      data: data.map(PrismaProjectMapper.toDomain),
+      meta: {
+        page,
+        perPage: 10,
+        totalCount: total,
+      },
+    }
   }
 
   async delete(project: Project): Promise<void> {

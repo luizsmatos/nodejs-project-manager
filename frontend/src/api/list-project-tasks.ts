@@ -1,11 +1,11 @@
 import { api } from '@/lib/axios'
 
-import { EnumTaskStatus, TaskDTO } from './dtos/task-dto'
+import { TaskDTO } from './dtos/task-dto'
 
 interface ListProjectTasksBody {
   projectId: string
-  title?: string
-  status?: EnumTaskStatus
+  title?: string | null
+  status?: string | null
   page?: number | null
 }
 

@@ -3,11 +3,17 @@ import { ProjectsRepository } from '../repositories/projects-repository'
 
 interface ListUserProjectsUseCaseRequest {
   userId: string
+  name?: string
   page: number
 }
 
 interface ListUserProjectsUseCaseResponse {
   projects: Project[]
+  meta: {
+    page: number
+    perPage: number
+    totalCount: number
+  }
 }
 
 export class ListUserProjectsUseCase {
@@ -15,14 +21,22 @@ export class ListUserProjectsUseCase {
 
   async execute({
     userId,
+    name,
     page,
   }: ListUserProjectsUseCaseRequest): Promise<ListUserProjectsUseCaseResponse> {
-    const projects = await this.projectsRepository.findManyByUserId(userId, {
-      page,
-    })
+    const projects = await this.projectsRepository.findManyByUserId(
+      {
+        userId,
+        name,
+      },
+      {
+        page,
+      },
+    )
 
     return {
-      projects,
+      projects: projects.data,
+      meta: projects.meta,
     }
   }
 }

@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 
 import { createProject } from '@/api/create-project'
 import { ListUserProjectsResponse } from '@/api/list-user-projects'
+import { useProjectQuery } from '@/hooks/use-project-query'
 
 import {
   DialogContent,
@@ -13,16 +14,18 @@ import {
 import { ProjectForm, ProjectFormSchema } from './project-form'
 
 export function CreateProject() {
+  const { name } = useProjectQuery()
   const queryClient = useQueryClient()
 
   const { mutateAsync: createProjectFn } = useMutation({
     mutationFn: createProject,
     onSuccess(newProject) {
+      const keys = ['projects', name]
       const previousProjects =
-        queryClient.getQueryData<ListUserProjectsResponse>(['projects'])
+        queryClient.getQueryData<ListUserProjectsResponse>(keys)
 
       if (previousProjects) {
-        queryClient.setQueryData<ListUserProjectsResponse>(['projects'], {
+        queryClient.setQueryData<ListUserProjectsResponse>(keys, {
           ...previousProjects,
           projects: [...previousProjects.projects, newProject],
         })

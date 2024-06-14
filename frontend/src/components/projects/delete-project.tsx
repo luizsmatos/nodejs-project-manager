@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { deleteProject } from '@/api/delete-project'
 import { ProjectDTO } from '@/api/dtos/project-dto'
 import { ListUserProjectsResponse } from '@/api/list-user-projects'
+import { useProjectQuery } from '@/hooks/use-project-query'
 
 import { Button } from '../ui/button'
 import {
@@ -20,16 +21,19 @@ interface DeleteProjectProps {
 }
 
 export function DeleteProject({ project }: DeleteProjectProps) {
+  const { name } = useProjectQuery()
+
   const queryClient = useQueryClient()
 
   const { mutateAsync: deleteProjectFn, isPending } = useMutation({
     mutationFn: deleteProject,
     onSuccess(_data, { projectId }) {
+      const keys = ['projects', name]
       const previousProjects =
-        queryClient.getQueryData<ListUserProjectsResponse>(['projects'])
+        queryClient.getQueryData<ListUserProjectsResponse>(keys)
 
       if (previousProjects) {
-        queryClient.setQueryData<ListUserProjectsResponse>(['projects'], {
+        queryClient.setQueryData<ListUserProjectsResponse>(keys, {
           ...previousProjects,
           projects: previousProjects.projects.filter(
             (item) => item.id !== projectId,

@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { ProjectDTO } from '@/api/dtos/project-dto'
 import { editProject } from '@/api/edit-project'
 import { ListUserProjectsResponse } from '@/api/list-user-projects'
+import { useProjectQuery } from '@/hooks/use-project-query'
 
 import {
   DialogContent,
@@ -18,16 +19,19 @@ interface EditProjectProps {
 }
 
 export function EditProject({ project }: EditProjectProps) {
+  const { name } = useProjectQuery()
+
   const queryClient = useQueryClient()
 
   const { mutateAsync: editProjectFn } = useMutation({
     mutationFn: editProject,
     onSuccess(updatedProject) {
+      const keys = ['projects', name]
       const previousProjects =
-        queryClient.getQueryData<ListUserProjectsResponse>(['projects'])
+        queryClient.getQueryData<ListUserProjectsResponse>(keys)
 
       if (previousProjects) {
-        queryClient.setQueryData<ListUserProjectsResponse>(['projects'], {
+        queryClient.setQueryData<ListUserProjectsResponse>(keys, {
           ...previousProjects,
           projects: previousProjects.projects.map((item) =>
             item.id === updatedProject.id ? updatedProject : item,

@@ -2,12 +2,27 @@ import { api } from '@/lib/axios'
 
 import { ProjectDTO } from './dtos/project-dto'
 
-export interface ListUserProjectsResponse {
-  projects: ProjectDTO[]
+interface ListUserProjectsQuery {
+  name?: string
+  page?: number
 }
 
-export async function listUserProjects() {
-  const response = await api.get<ListUserProjectsResponse>('/projects')
+export interface ListUserProjectsResponse {
+  projects: ProjectDTO[]
+  meta: {
+    page: number
+    perPage: number
+    totalCount: number
+  }
+}
 
-  return response.data.projects
+export async function listUserProjects({ name, page }: ListUserProjectsQuery) {
+  const response = await api.get<ListUserProjectsResponse>('/projects', {
+    params: {
+      name,
+      page,
+    },
+  })
+
+  return response.data
 }

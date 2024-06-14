@@ -18,7 +18,7 @@ interface TasksProps {
 
 export function Tasks({ project }: TasksProps) {
   const { data: tasks } = useQuery({
-    queryKey: ['tasks'],
+    queryKey: ['tasks', { projectId: project.id }],
     queryFn: () => listProjectTasks({ projectId: project.id }),
   })
 

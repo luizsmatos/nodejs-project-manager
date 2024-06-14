@@ -4,8 +4,15 @@ import { z } from 'zod'
 
 import { Button } from '../ui/button'
 import { DialogClose, DialogFooter } from '../ui/dialog'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '../ui/form'
 import { Input } from '../ui/input'
-import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
 
 const projectFormSchema = z.object({
@@ -22,50 +29,68 @@ interface ProjectFormProps {
 }
 
 export function ProjectForm({ initialValues, onSubmit }: ProjectFormProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<ProjectFormSchema>({
+  const form = useForm<ProjectFormSchema>({
     resolver: zodResolver(projectFormSchema),
-    defaultValues: initialValues,
+    defaultValues: {
+      name: '',
+      description: '',
+      ...initialValues,
+    },
   })
 
+  const { isSubmitting, errors } = form.formState
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="name">Nome</Label>
-        <Input className="col-span-3" id="name" {...register('name')} />
-        {errors.name && (
-          <p className="col-span-4 text-red-500">{errors.name.message}</p>
-        )}
-      </div>
-
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="description">Descrição</Label>
-        <Textarea
-          id="description"
-          className="col-span-3 resize-none"
-          {...register('description')}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="grid grid-cols-4 items-center gap-4">
+              <FormLabel>Nome</FormLabel>
+              <FormControl className="col-span-3">
+                <Input {...field} />
+              </FormControl>
+              <FormMessage>
+                {errors.name && (
+                  <p className="text-red-500">{errors.name.message}</p>
+                )}
+              </FormMessage>
+            </FormItem>
+          )}
         />
-        {errors.description && (
-          <p className="col-span-4 text-red-500">
-            {errors.description.message}
-          </p>
-        )}
-      </div>
 
-      <DialogFooter>
-        <DialogClose asChild>
-          <Button type="button" variant="outline">
-            Cancelar
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem className="grid grid-cols-4 items-center gap-4">
+              <FormLabel>Descrição</FormLabel>
+              <FormControl className="col-span-3">
+                <Textarea {...field} />
+              </FormControl>
+              <FormMessage>
+                {errors.description && (
+                  <p className="text-red-500">{errors.description.message}</p>
+                )}
+              </FormMessage>
+            </FormItem>
+          )}
+        />
+
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="outline">
+              Cancelar
+            </Button>
+          </DialogClose>
+
+          <Button type="submit" disabled={isSubmitting}>
+            {initialValues ? 'Salvar' : 'Criar'}
           </Button>
-        </DialogClose>
-
-        <Button type="submit" disabled={isSubmitting}>
-          {initialValues ? 'Salvar' : 'Criar'}
-        </Button>
-      </DialogFooter>
-    </form>
+        </DialogFooter>
+      </form>
+    </Form>
   )
 }

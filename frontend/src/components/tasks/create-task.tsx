@@ -1,34 +1,47 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { Button } from '../ui/button'
+import { createTask } from '@/api/create-task'
+import { ProjectDTO } from '@/api/dtos/project-dto'
+import { TaskDTO } from '@/api/dtos/task-dto'
+
 import {
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '../ui/dialog'
-import { Input } from '../ui/input'
-import { Label } from '../ui/label'
-import { Textarea } from '../ui/textarea'
+import { TaskForm, TaskFormSchema } from './task-form'
 
-const createProductSchema = z.object({
-  title: z.string().min(3),
-  description: z.string().min(3).max(191),
-})
+interface CreateTaskProps {
+  project: ProjectDTO
+}
 
-type CreateTaskSchema = z.infer<typeof createProductSchema>
+export function CreateTask({ project }: CreateTaskProps) {
+  const queryClient = useQueryClient()
 
-export function CreateTask() {
-  const { register, handleSubmit } = useForm<CreateTaskSchema>({
-    resolver: zodResolver(createProductSchema),
+  const { mutateAsync: createTaskFn } = useMutation({
+    mutationFn: createTask,
+    onSuccess(newTask) {
+      const cached = queryClient.getQueryData<TaskDTO[]>(['tasks'])
+
+      if (cached) {
+        queryClient.setQueryData<TaskDTO[]>(['tasks'], [...cached, newTask])
+      }
+    },
   })
 
-  function handleCreateTask(data: CreateTaskSchema) {
-    console.log(data)
+  async function handleCreateTask(data: TaskFormSchema) {
+    try {
+      await createTaskFn({
+        ...data,
+        projectId: project.id,
+      })
+
+      toast.success('Tarefa criada com sucesso!')
+    } catch {
+      toast.error('Erro ao criar tarefa, tente novamente!')
+    }
   }
 
   return (
@@ -38,31 +51,7 @@ export function CreateTask() {
         <DialogDescription>Preencha os campos abaixo.</DialogDescription>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit(handleCreateTask)} className="space-y-6">
-        <div className="grid grid-cols-4 items-center gap-4">
-          <Label htmlFor="title">Título</Label>
-          <Input className="col-span-3" id="title" {...register('title')} />
-        </div>
-
-        <div className="grid grid-cols-4 items-center gap-4">
-          <Label htmlFor="description">Descrição</Label>
-          <Textarea
-            id="description"
-            className="col-span-3 resize-none"
-            {...register('description')}
-          />
-        </div>
-
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button type="button" variant="outline">
-              Cancelar
-            </Button>
-          </DialogClose>
-
-          <Button type="submit">Criar</Button>
-        </DialogFooter>
-      </form>
+      <TaskForm onSubmit={handleCreateTask} />
     </DialogContent>
   )
 }

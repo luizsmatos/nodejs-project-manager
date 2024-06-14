@@ -74,52 +74,54 @@ export function TaskItem({ task }: TaskItemProps) {
         {format(task.createdAt, 'PP', { locale: ptBR })}
       </TableCell>
 
-      <TableCell className="flex items-center gap-1">
+      <TableCell>
         <Dialog>
-          <DialogTrigger
-            asChild
-            onClick={() => setDialogType(DialogType.UPDATE)}
-          >
-            <div>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="outline" size="xs">
-                      <FilePenLine className="h-3 w-3" />
-                      <span className="sr-only">Editar tarefa</span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Editar tarefa</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-          </DialogTrigger>
+          <div className="flex items-center gap-1">
+            <DialogTrigger
+              asChild
+              onClick={() => setDialogType(DialogType.UPDATE)}
+            >
+              <div>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="xs">
+                        <FilePenLine className="h-3 w-3" />
+                        <span className="sr-only">Editar tarefa</span>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Editar tarefa</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            </DialogTrigger>
 
-          <DialogTrigger
-            asChild
-            onClick={() => setDialogType(DialogType.DELETE)}
-          >
-            <div>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="outline" size="xs">
-                      <FileX2 className="h-3 w-3" />
-                      <span className="sr-only">Excluir tarefa</span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Excluir tarefa</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-          </DialogTrigger>
+            <DialogTrigger
+              asChild
+              onClick={() => setDialogType(DialogType.DELETE)}
+            >
+              <div>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="xs">
+                        <FileX2 className="h-3 w-3" />
+                        <span className="sr-only">Excluir tarefa</span>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Excluir tarefa</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            </DialogTrigger>
 
-          {dialogType === DialogType.UPDATE && <EditTask task={task} />}
-          {dialogType === DialogType.DELETE && <DeleteTask task={task} />}
+            {dialogType === DialogType.UPDATE && <EditTask task={task} />}
+            {dialogType === DialogType.DELETE && <DeleteTask task={task} />}
+          </div>
         </Dialog>
       </TableCell>
     </TableRow>

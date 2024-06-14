@@ -1,12 +1,12 @@
-import { Dialog, DialogTrigger } from '@radix-ui/react-dialog'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { ClipboardIcon, FilePenLine, FileX2 } from 'lucide-react'
+import { ClipboardIcon, FilePenLine, FileX2, Search } from 'lucide-react'
 import { useState } from 'react'
 
 import { TaskDTO } from '@/api/dtos/task-dto'
 
 import { Button } from '../ui/button'
+import { Dialog, DialogTrigger } from '../ui/dialog'
 import { TableCell, TableRow } from '../ui/table'
 import {
   Tooltip,
@@ -16,6 +16,7 @@ import {
 } from '../ui/tooltip'
 import { DeleteTask } from './delete-task'
 import { EditTask } from './edit-task'
+import { TaskDetails } from './task-details'
 import { TaskStatus } from './task-status'
 
 interface TaskItemProps {
@@ -32,6 +33,30 @@ export function TaskItem({ task }: TaskItemProps) {
 
   return (
     <TableRow>
+      <TableCell>
+        <Dialog>
+          <DialogTrigger asChild>
+            <div>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="outline" size="xs">
+                      <Search className="h-3 w-3 shrink-0" />
+                      <span className="sr-only">Detalhes da tarefa</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Detalhes da tarefa</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </DialogTrigger>
+
+          <TaskDetails task={task} />
+        </Dialog>
+      </TableCell>
+
       <TableCell>
         <div className="flex items-center gap-2">
           <ClipboardIcon className="h-4 w-4 shrink-0" />

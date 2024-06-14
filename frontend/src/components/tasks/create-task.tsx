@@ -23,10 +23,11 @@ export function CreateTask({ project }: CreateTaskProps) {
   const { mutateAsync: createTaskFn } = useMutation({
     mutationFn: createTask,
     onSuccess(newTask) {
-      const cached = queryClient.getQueryData<TaskDTO[]>(['tasks'])
+      const keys = ['tasks', { projectId: project.id }]
+      const previousTasks = queryClient.getQueryData<TaskDTO[]>(keys)
 
-      if (cached) {
-        queryClient.setQueryData<TaskDTO[]>(['tasks'], [...cached, newTask])
+      if (previousTasks) {
+        queryClient.setQueryData<TaskDTO[]>(keys, [...previousTasks, newTask])
       }
     },
   })

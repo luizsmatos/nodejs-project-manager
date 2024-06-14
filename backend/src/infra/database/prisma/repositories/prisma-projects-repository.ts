@@ -29,7 +29,15 @@ export class PrismaProjectsRepository implements ProjectsRepository {
     { userId, name }: FindManyByUserIdParams,
     { page }: PaginationParams,
   ): Promise<PaginationResponse<Project>> {
-    const projectsCount = prisma.project.count({ where: { userId } })
+    const projectsCount = prisma.project.count({
+      where: {
+        userId,
+        name: {
+          contains: name,
+        },
+      },
+    })
+
     const projects = prisma.project.findMany({
       where: {
         userId,

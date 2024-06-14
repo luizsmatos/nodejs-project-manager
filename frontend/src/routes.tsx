@@ -6,12 +6,13 @@ import { NotFound } from './pages/404'
 import { Home } from './pages/app/home'
 import { Login } from './pages/auth/login'
 import { Register } from './pages/auth/register'
+import { Error } from './pages/error'
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <AppLayout />,
-    errorElement: <NotFound />,
+    errorElement: <Error />,
     children: [{ path: '/', element: <Home /> }],
   },
   {
@@ -21,5 +22,9 @@ export const router = createBrowserRouter([
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ])

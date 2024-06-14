@@ -22,14 +22,15 @@ export function EditTask({ task }: EditTaskProps) {
   const { mutateAsync: editTaskFn } = useMutation({
     mutationFn: editTask,
     onSuccess(updatedTask) {
-      const cached = queryClient.getQueryData<TaskDTO[]>(['tasks'])
+      const keys = ['tasks', { projectId: task.projectId }]
+      const cached = queryClient.getQueryData<TaskDTO[]>(keys)
 
       if (cached) {
         const updated = cached.map((item) =>
           item.id === updatedTask.id ? updatedTask : item,
         )
 
-        queryClient.setQueryData<TaskDTO[]>(['tasks'], updated)
+        queryClient.setQueryData<TaskDTO[]>(keys, updated)
       }
     },
   })

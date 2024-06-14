@@ -33,7 +33,7 @@ describe('Edit Task UseCase', () => {
       title: updateTitle,
       description: updateDescription,
       status: TaskStatus.DONE,
-      completedBy: user.id,
+      userId: user.id,
     })
 
     expect(result.task).toEqual(
@@ -57,6 +57,7 @@ describe('Edit Task UseCase', () => {
         title: faker.lorem.word(5),
         description: faker.lorem.paragraph(),
         status: TaskStatus.PENDING,
+        userId: faker.string.uuid(),
       }),
     ).rejects.toEqual(new TaskNotFoundError())
   })

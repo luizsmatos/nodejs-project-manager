@@ -11,12 +11,9 @@ export async function editTaskController(
     title: z.string().min(3).optional(),
     description: z.string().min(3).max(191).optional(),
     status: z.nativeEnum(TaskStatus).optional(),
-    completedBy: z.string().uuid().optional(),
   })
 
-  const { title, description, status, completedBy } = editTaskBodySchema.parse(
-    request.body,
-  )
+  const { title, description, status } = editTaskBodySchema.parse(request.body)
 
   const editTaskParamsSchema = z.object({
     taskId: z.string().uuid(),
@@ -30,7 +27,7 @@ export async function editTaskController(
     title,
     description,
     status,
-    completedBy,
+    userId: request.user.id,
   })
 
   const { task } = result

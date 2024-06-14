@@ -7,7 +7,7 @@ interface EditTaskUseCaseRequest {
   title?: string
   description?: string
   status?: TaskStatus
-  completedBy?: string
+  userId: string
 }
 
 interface EditTaskUseCaseResponse {
@@ -22,7 +22,7 @@ export class EditTaskUseCase {
     title,
     description,
     status,
-    completedBy,
+    userId,
   }: EditTaskUseCaseRequest): Promise<EditTaskUseCaseResponse> {
     const task = await this.tasksRepository.findById(taskId)
 
@@ -30,11 +30,13 @@ export class EditTaskUseCase {
       throw new TaskNotFoundError()
     }
 
+    const taskCompleted = status === TaskStatus.DONE
+
     task.title = title ?? task.title
     task.description = description ?? task.description
     task.status = status ?? task.status
-    task.completedBy = completedBy ?? null
-    task.completedAt = completedBy ? new Date() : null
+    task.completedBy = taskCompleted ? userId : null
+    task.completedAt = taskCompleted ? new Date() : null
     task.updatedAt = new Date()
 
     await this.tasksRepository.save(task)

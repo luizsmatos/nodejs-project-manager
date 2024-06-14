@@ -3,7 +3,7 @@ import { api } from '@/lib/axios'
 import { ProjectDTO } from './dtos/project-dto'
 
 interface ListUserProjectsQuery {
-  name?: string
+  name?: string | null
   page?: number
 }
 

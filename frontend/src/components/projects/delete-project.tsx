@@ -21,7 +21,7 @@ interface DeleteProjectProps {
 export function DeleteProject({ project }: DeleteProjectProps) {
   const queryClient = useQueryClient()
 
-  const { mutateAsync: deleteProjectFn } = useMutation({
+  const { mutateAsync: deleteProjectFn, isPending } = useMutation({
     mutationFn: deleteProject,
     onSuccess(_data, { projectId }) {
       const cached = queryClient.getQueryData<ProjectDTO[]>(['projects'])
@@ -39,8 +39,7 @@ export function DeleteProject({ project }: DeleteProjectProps) {
       await deleteProjectFn({ projectId })
 
       toast.success('Projeto excluído com sucesso!')
-    } catch (e) {
-      console.log(e)
+    } catch {
       toast.error('Erro ao excluir o projeto!')
     }
   }
@@ -63,7 +62,11 @@ export function DeleteProject({ project }: DeleteProjectProps) {
             </Button>
           </DialogClose>
 
-          <Button type="button" onClick={() => handleDeleteProject(project.id)}>
+          <Button
+            type="button"
+            disabled={isPending}
+            onClick={() => handleDeleteProject(project.id)}
+          >
             Excluir
           </Button>
         </DialogFooter>

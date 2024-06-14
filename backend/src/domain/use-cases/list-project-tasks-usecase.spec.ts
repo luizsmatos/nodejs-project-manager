@@ -33,7 +33,7 @@ describe('List Project Tasks UseCase', () => {
   it('should be able to list paginated tasks', async () => {
     const project = makeProject()
 
-    for (let i = 1; i <= 22; i++) {
+    for (let i = 1; i <= 12; i++) {
       inMemoryTasksRepository.items.push(makeTask({ projectId: project.id }))
     }
 
@@ -43,5 +43,6 @@ describe('List Project Tasks UseCase', () => {
     })
 
     expect(result.tasks).toHaveLength(2)
+    expect(result.meta.totalCount).toBe(12)
   })
 })

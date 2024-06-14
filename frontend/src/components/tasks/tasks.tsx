@@ -49,7 +49,8 @@ export function Tasks({ project }: TasksProps) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[320px]">Elemento</TableHead>
+                <TableHead className="w-[64px]"></TableHead>
+                <TableHead>Elemento</TableHead>
                 <TableHead className="w-[140px]">Pessoa</TableHead>
                 <TableHead className="w-[140px]">Status</TableHead>
                 <TableHead className="w-[140px]">Data</TableHead>

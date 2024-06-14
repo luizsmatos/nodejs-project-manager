@@ -45,32 +45,30 @@ export function DeleteProject({ project }: DeleteProjectProps) {
   }
 
   return (
-    <>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Deseja realmente excluir?</DialogTitle>
-          <DialogDescription>
-            Essa ação não pode ser desfeita. Todos os dados relacionados a esse
-            projeto serão perdidos.
-          </DialogDescription>
-        </DialogHeader>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Excluir projeto</DialogTitle>
+        <DialogDescription>
+          Essa ação não pode ser desfeita. Todos os dados relacionados a esse
+          projeto serão perdidos.
+        </DialogDescription>
+      </DialogHeader>
 
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button type="button" variant="outline">
-              Cancelar
-            </Button>
-          </DialogClose>
-
-          <Button
-            type="button"
-            disabled={isPending}
-            onClick={() => handleDeleteProject(project.id)}
-          >
-            Excluir
+      <DialogFooter>
+        <DialogClose asChild>
+          <Button type="button" variant="outline">
+            Cancelar
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </>
+        </DialogClose>
+
+        <Button
+          type="button"
+          disabled={isPending}
+          onClick={() => handleDeleteProject(project.id)}
+        >
+          Excluir
+        </Button>
+      </DialogFooter>
+    </DialogContent>
   )
 }

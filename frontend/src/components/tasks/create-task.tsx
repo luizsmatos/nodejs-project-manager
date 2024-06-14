@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
-import { z } from 'zod'
 
 import { createTask } from '@/api/create-task'
 import { ProjectDTO } from '@/api/dtos/project-dto'
 import { ListProjectTasksResponse } from '@/api/list-project-tasks'
+import { useTaskQuery } from '@/hooks/use-task-query'
 
 import {
   DialogContent,
@@ -20,15 +19,14 @@ interface CreateTaskProps {
 }
 
 export function CreateTask({ project }: CreateTaskProps) {
-  const [searchParams] = useSearchParams()
-  const page = z.coerce.number().parse(searchParams.get('page') ?? 1)
+  const { title, status, page } = useTaskQuery()
 
   const queryClient = useQueryClient()
 
   const { mutateAsync: createTaskFn } = useMutation({
     mutationFn: createTask,
     onSuccess(newTask) {
-      const keys = ['tasks', project.id, page]
+      const keys = ['tasks', project.id, page, title, status]
       const previousTasks =
         queryClient.getQueryData<ListProjectTasksResponse>(keys)
 

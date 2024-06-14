@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
-import { z } from 'zod'
 
 import { deleteTask } from '@/api/delete-task'
 import { TaskDTO } from '@/api/dtos/task-dto'
 import { ListProjectTasksResponse } from '@/api/list-project-tasks'
+import { useTaskQuery } from '@/hooks/use-task-query'
 
 import { Button } from '../ui/button'
 import {
@@ -22,15 +21,14 @@ interface DeleteTaskProps {
 }
 
 export function DeleteTask({ task }: DeleteTaskProps) {
-  const [searchParams] = useSearchParams()
-  const page = z.coerce.number().parse(searchParams.get('page') ?? 1)
+  const { title, status, page } = useTaskQuery()
 
   const queryClient = useQueryClient()
 
   const { mutateAsync: deleteTaskFn, isPending } = useMutation({
     mutationFn: deleteTask,
     onSuccess(_data, { taskId }) {
-      const keys = ['tasks', task.projectId, page]
+      const keys = ['tasks', task.projectId, page, title, status]
       const previousTasks =
         queryClient.getQueryData<ListProjectTasksResponse>(keys)
 

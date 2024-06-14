@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { PlusIcon } from 'lucide-react'
-import { useSearchParams } from 'react-router-dom'
-import { z } from 'zod'
 
 import { ProjectDTO } from '@/api/dtos/project-dto'
 import { listProjectTasks } from '@/api/list-project-tasks'
+import { useTaskQuery } from '@/hooks/use-task-query'
 
 import { Pagination } from '../pagination'
 import { Button } from '../ui/button'
@@ -19,14 +18,10 @@ interface TasksProps {
 }
 
 export function Tasks({ project }: TasksProps) {
-  const [searchParams, setSearchParams] = useSearchParams()
-
-  const title = searchParams.get('title')
-  const status = searchParams.get('status')
-  const page = z.coerce.number().parse(searchParams.get('page') ?? 1)
+  const { title, status, page, setSearchParams } = useTaskQuery()
 
   const { data: result } = useQuery({
-    queryKey: ['tasks', project.id, title, status, page],
+    queryKey: ['tasks', project.id, page, title, status],
     queryFn: () =>
       listProjectTasks({
         projectId: project.id,

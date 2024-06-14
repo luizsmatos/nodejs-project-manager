@@ -29,7 +29,15 @@ export class PrismaTasksRepository implements TasksRepository {
     { projectId, title, status }: FindManyByProjectIdParams,
     { page }: PaginationParams,
   ): Promise<PaginationResponse<Task>> {
-    const tasksCount = prisma.task.count({ where: { projectId } })
+    const tasksCount = prisma.task.count({
+      where: {
+        projectId,
+        title: {
+          contains: title,
+        },
+        status,
+      },
+    })
     const tasks = prisma.task.findMany({
       where: {
         projectId,

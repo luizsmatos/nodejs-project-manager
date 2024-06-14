@@ -25,6 +25,8 @@ describe('Create Task UseCase', () => {
   it('should be able create a new task', async () => {
     const project = makeProject()
 
+    inMemoryProjectsRepository.create(project)
+
     const result = await sut.execute({
       projectId: project.id,
       title: faker.lorem.word(5),

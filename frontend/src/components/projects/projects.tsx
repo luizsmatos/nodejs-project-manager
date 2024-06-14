@@ -15,17 +15,17 @@ import { ProjectItem } from './project-item'
 export function Projects() {
   const { setSelectedProject } = useContext(ProjectContext)
 
-  const { data: projects, isLoading: isLoadingProjects } = useQuery({
+  const { data: result, isLoading: isLoadingProjects } = useQuery({
     queryKey: ['projects'],
-    queryFn: listUserProjects,
+    queryFn: () => listUserProjects({}),
     staleTime: Infinity,
   })
 
   useEffect(() => {
-    if (projects && projects.length > 0) {
-      setSelectedProject(projects[0])
+    if (result && result.projects.length > 0) {
+      setSelectedProject(result.projects[0])
     }
-  }, [projects, setSelectedProject])
+  }, [result, setSelectedProject])
 
   return (
     <div className="flex flex-col gap-6">
@@ -51,7 +51,8 @@ export function Projects() {
               <Skeleton className="h-9 w-full px-4 py-2" />
             </div>
           ) : (
-            projects?.map((project) => (
+            result &&
+            result.projects.map((project) => (
               <li key={project.id}>
                 <ProjectItem project={project} />
               </li>

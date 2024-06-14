@@ -1,4 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { PlusIcon } from 'lucide-react'
+
+import { ProjectDTO } from '@/api/dtos/project-dto'
+import { listProjectTasks } from '@/api/list-project-tasks'
 
 import { Pagination } from '../pagination'
 import { Button } from '../ui/button'
@@ -6,13 +10,23 @@ import { Dialog, DialogTrigger } from '../ui/dialog'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '../ui/table'
 import { CreateTask } from './create-task'
 import { TaskFilters } from './task-filters'
-import { TaskTableRow } from './task-table-row'
+import { TaskItem } from './task-item'
 
-export function Tasks() {
+interface TasksProps {
+  project: ProjectDTO
+}
+
+export function Tasks({ project }: TasksProps) {
+  const { data: tasks } = useQuery({
+    queryKey: ['tasks'],
+    queryFn: () => listProjectTasks({ projectId: project.id }),
+  })
+
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-bold tracking-tight">Titulo Projeto</h1>
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold tracking-tight">{project.name}</h1>
+        <p className="text-lg text-muted-foreground">{project.description}</p>
       </div>
 
       <div className="space-y-2.5">
@@ -27,7 +41,7 @@ export function Tasks() {
               </Button>
             </DialogTrigger>
 
-            <CreateTask />
+            <CreateTask project={project} />
           </Dialog>
         </div>
 
@@ -43,10 +57,8 @@ export function Tasks() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {Array.from({ length: 10 }).map((_, index) => (
-                <TaskTableRow key={index} />
-              ))}
-              <TaskTableRow />
+              {tasks &&
+                tasks.map((task) => <TaskItem key={task.id} task={task} />)}
             </TableBody>
           </Table>
         </div>

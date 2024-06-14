@@ -41,7 +41,12 @@ interface TaskFormProps {
 export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
   const form = useForm<TaskFormSchema>({
     resolver: zodResolver(taskFormSchema),
-    defaultValues: initialValues,
+    defaultValues: {
+      title: '',
+      description: '',
+      status: EnumTaskStatus.PENDING,
+      ...initialValues,
+    },
   })
 
   const { isSubmitting, errors } = form.formState
@@ -56,11 +61,7 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
             <FormItem className="grid grid-cols-4 items-center gap-4">
               <FormLabel>Título</FormLabel>
               <FormControl className="col-span-3">
-                <Input
-                  {...field}
-                  onChange={field.onChange}
-                  value={field.value}
-                />
+                <Input {...field} />
               </FormControl>
               <FormMessage>
                 {errors.title && (
@@ -78,12 +79,7 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
             <FormItem className="grid grid-cols-4 items-center gap-4">
               <FormLabel>Descrição</FormLabel>
               <FormControl className="col-span-3">
-                <Textarea
-                  {...field}
-                  onChange={field.onChange}
-                  value={field.value}
-                  className="resize-none"
-                />
+                <Textarea {...field} className="resize-none" />
               </FormControl>
               <FormMessage>
                 {errors.description && (

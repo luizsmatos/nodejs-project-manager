@@ -6,8 +6,15 @@ import { EnumTaskStatus } from '@/api/dtos/task-dto'
 
 import { Button } from '../ui/button'
 import { DialogClose, DialogFooter } from '../ui/dialog'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '../ui/form'
 import { Input } from '../ui/input'
-import { Label } from '../ui/label'
 import {
   Select,
   SelectContent,
@@ -32,65 +39,106 @@ interface TaskFormProps {
 }
 
 export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<TaskFormSchema>({
+  const form = useForm<TaskFormSchema>({
     resolver: zodResolver(taskFormSchema),
     defaultValues: initialValues,
   })
 
+  const { isSubmitting, errors } = form.formState
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="title">Título</Label>
-        <Input className="col-span-3" id="title" {...register('title')} />
-        {errors.title && <p className="text-red-500">{errors.title.message}</p>}
-      </div>
-
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="description">Descrição</Label>
-        <Textarea
-          id="description"
-          className="col-span-3 resize-none"
-          {...register('description')}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem className="grid grid-cols-4 items-center gap-4">
+              <FormLabel>Título</FormLabel>
+              <FormControl className="col-span-3">
+                <Input
+                  {...field}
+                  onChange={field.onChange}
+                  value={field.value}
+                />
+              </FormControl>
+              <FormMessage>
+                {errors.title && (
+                  <p className="text-red-500">{errors.title.message}</p>
+                )}
+              </FormMessage>
+            </FormItem>
+          )}
         />
-        {errors.description && (
-          <p className="text-red-500">{errors.description.message}</p>
-        )}
-      </div>
 
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="status">Status</Label>
-        <Select defaultValue={initialValues?.status}>
-          <SelectTrigger id="status" className="col-span-3">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={EnumTaskStatus.PENDING}>Pendente</SelectItem>
-            <SelectItem value={EnumTaskStatus.IN_PROGRESS}>
-              Em progresso
-            </SelectItem>
-            <SelectItem value={EnumTaskStatus.DONE}>Feito</SelectItem>
-          </SelectContent>
-        </Select>
-        {errors.status && (
-          <p className="text-red-500">{errors.status.message}</p>
-        )}
-      </div>
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem className="grid grid-cols-4 items-center gap-4">
+              <FormLabel>Descrição</FormLabel>
+              <FormControl className="col-span-3">
+                <Textarea
+                  {...field}
+                  onChange={field.onChange}
+                  value={field.value}
+                  className="resize-none"
+                />
+              </FormControl>
+              <FormMessage>
+                {errors.description && (
+                  <p className="text-red-500">{errors.description.message}</p>
+                )}
+              </FormMessage>
+            </FormItem>
+          )}
+        />
 
-      <DialogFooter>
-        <DialogClose asChild>
-          <Button type="button" variant="outline">
-            Cancelar
+        <FormField
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <FormItem className="grid grid-cols-4 items-center gap-4">
+              <FormLabel htmlFor="status">Status</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger id="status" className="col-span-3">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={EnumTaskStatus.PENDING}>
+                      Pendente
+                    </SelectItem>
+                    <SelectItem value={EnumTaskStatus.IN_PROGRESS}>
+                      Em progresso
+                    </SelectItem>
+                    <SelectItem value={EnumTaskStatus.DONE}>Feito</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage>
+                {errors.status && (
+                  <p className="text-red-500">{errors.status.message}</p>
+                )}
+              </FormMessage>
+            </FormItem>
+          )}
+        />
+
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="outline">
+              Cancelar
+            </Button>
+          </DialogClose>
+          <Button type="submit" disabled={isSubmitting}>
+            {initialValues ? 'Salvar' : 'Criar'}
           </Button>
-        </DialogClose>
-
-        <Button type="submit" disabled={isSubmitting}>
-          {initialValues ? 'Salvar' : 'Criar'}
-        </Button>
-      </DialogFooter>
-    </form>
+        </DialogFooter>
+      </form>
+    </Form>
   )
 }

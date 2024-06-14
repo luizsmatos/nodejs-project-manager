@@ -38,7 +38,7 @@ export function Login() {
       await authenticateUserFn({ email: data.email, password: data.password })
       toast.success('Login efetuado com sucesso!')
 
-      navigate('/')
+      navigate('/home')
     } catch (error) {
       toast.error('Credenciais inválidas.')
     }

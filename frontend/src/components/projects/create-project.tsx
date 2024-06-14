@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { createProject } from '@/api/create-project'
-import { ProjectDTO } from '@/api/dtos/project-dto'
+import { ListUserProjectsResponse } from '@/api/list-user-projects'
 
 import {
   DialogContent,
@@ -18,13 +18,14 @@ export function CreateProject() {
   const { mutateAsync: createProjectFn } = useMutation({
     mutationFn: createProject,
     onSuccess(newProject) {
-      const cached = queryClient.getQueryData<ProjectDTO[]>(['projects'])
+      const previousProjects =
+        queryClient.getQueryData<ListUserProjectsResponse>(['projects'])
 
-      if (cached) {
-        queryClient.setQueryData<ProjectDTO[]>(
-          ['projects'],
-          [...cached, newProject],
-        )
+      if (previousProjects) {
+        queryClient.setQueryData<ListUserProjectsResponse>(['projects'], {
+          ...previousProjects,
+          projects: [...previousProjects.projects, newProject],
+        })
       }
     },
   })

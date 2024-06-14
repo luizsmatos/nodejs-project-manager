@@ -1,5 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { ChevronDown, LogOut, UserCog } from 'lucide-react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { getUserProfile } from '@/api/get-user-profile'
@@ -19,11 +21,30 @@ import { Skeleton } from '../ui/skeleton'
 export function AccountMenu() {
   const navigate = useNavigate()
 
-  const { data: profile, isLoading: isProfileLoading } = useQuery({
+  const {
+    data: profile,
+    isLoading: isProfileLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ['user-profile'],
     queryFn: getUserProfile,
     staleTime: Infinity,
+    retry: false,
   })
+
+  useEffect(() => {
+    const handleAuthError = () => {
+      const unauthorized =
+        isError && error instanceof AxiosError && error.response?.status === 401
+
+      if (unauthorized) {
+        navigate('/login', { replace: true })
+      }
+    }
+
+    handleAuthError()
+  }, [error, isError, navigate, profile])
 
   const { mutateAsync: logoutFn, isPending: isComingOut } = useMutation({
     mutationFn: logout,

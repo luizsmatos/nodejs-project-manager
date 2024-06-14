@@ -1,6 +1,12 @@
-import { PaginationParams } from '@/core/types/pagination-params'
+import {
+  PaginationParams,
+  PaginationResponse,
+} from '@/core/types/pagination-params'
 import { Project } from '@/domain/entities/project'
-import { ProjectsRepository } from '@/domain/repositories/projects-repository'
+import {
+  FindManyByUserIdParams,
+  ProjectsRepository,
+} from '@/domain/repositories/projects-repository'
 
 export class InMemoryProjectsRepository implements ProjectsRepository {
   public items: Project[] = []
@@ -12,14 +18,31 @@ export class InMemoryProjectsRepository implements ProjectsRepository {
   }
 
   async findManyByUserId(
-    userId: string,
+    { userId, name }: FindManyByUserIdParams,
     { page }: PaginationParams,
-  ): Promise<Project[]> {
+  ): Promise<PaginationResponse<Project>> {
+    const projectsCount = this.items.filter(
+      (item) => item.userId === userId,
+    ).length
     const projects = this.items
       .filter((item) => item.userId === userId)
-      .slice((page - 1) * 20, page * 20)
+      .filter((item) => {
+        if (!name) {
+          return true
+        }
 
-    return projects
+        return item.name.toLowerCase().includes(name.toLowerCase())
+      })
+      .slice((page - 1) * 10, page * 10)
+
+    return {
+      data: projects,
+      meta: {
+        page,
+        perPage: 10,
+        totalCount: projectsCount,
+      },
+    }
   }
 
   async create(project: Project): Promise<void> {

@@ -24,11 +24,12 @@ export function DeleteTask({ task }: DeleteTaskProps) {
   const { mutateAsync: deleteTaskFn, isPending } = useMutation({
     mutationFn: deleteTask,
     onSuccess(_data, { taskId }) {
-      const previousTasks = queryClient.getQueryData<TaskDTO[]>(['tasks'])
+      const keys = ['tasks', { projectId: task.projectId }]
+      const previousTasks = queryClient.getQueryData<TaskDTO[]>(keys)
 
       if (previousTasks) {
         queryClient.setQueryData<TaskDTO[]>(
-          ['tasks'],
+          keys,
           previousTasks.filter((t) => t.id !== taskId),
         )
       }

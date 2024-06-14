@@ -1,38 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
-import {
-  FilePenIcon,
-  MoveHorizontalIcon,
-  PlusIcon,
-  Table,
-  TrashIcon,
-} from 'lucide-react'
-import { useContext, useEffect, useState } from 'react'
+import { PlusIcon } from 'lucide-react'
+import { useContext, useEffect } from 'react'
 
 import { listUserProjects } from '@/api/list-user-projects'
 import { ProjectContext } from '@/context/project-context'
 
 import { Button } from '../ui/button'
 import { Dialog, DialogTrigger } from '../ui/dialog'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../ui/dropdown-menu'
 import { Skeleton } from '../ui/skeleton'
 import { CreateProject } from './create-project'
-import { DeleteProject } from './delete-project'
-import { EditProject } from './edit-project'
 import { ProjectFilters } from './project-filters'
-
-enum DialogType {
-  Edit = 'edit',
-  Delete = 'delete',
-}
+import { ProjectItem } from './project-item'
 
 export function Projects() {
-  const { selectedProject, setSelectedProject } = useContext(ProjectContext)
-  const [dialogType, setDialogType] = useState<DialogType | null>(null)
+  const { setSelectedProject } = useContext(ProjectContext)
 
   const { data: projects, isLoading: isLoadingProjects } = useQuery({
     queryKey: ['projects'],
@@ -72,63 +53,7 @@ export function Projects() {
           ) : (
             projects?.map((project) => (
               <li key={project.id}>
-                <div className="flex items-center justify-between p-0.5">
-                  <Button
-                    variant="ghost"
-                    className={`w-full justify-start text-gray-600 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 ${
-                      selectedProject?.id === project.id
-                        ? 'bg-gray-200 dark:bg-gray-700'
-                        : ''
-                    }`}
-                    onClick={() => setSelectedProject(project)}
-                  >
-                    <Table className="mr-2 h-4 w-4" />
-                    {project.name}
-                  </Button>
-
-                  <Dialog>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                        >
-                          <MoveHorizontalIcon className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-
-                      <DropdownMenuContent align="end">
-                        <DialogTrigger
-                          asChild
-                          onClick={() => setDialogType(DialogType.Edit)}
-                        >
-                          <DropdownMenuItem>
-                            <FilePenIcon className="mr-2 h-4 w-4" />
-                            Editar Projeto
-                          </DropdownMenuItem>
-                        </DialogTrigger>
-                        <DialogTrigger
-                          asChild
-                          onClick={() => setDialogType(DialogType.Delete)}
-                        >
-                          <DropdownMenuItem>
-                            <TrashIcon className="mr-2 h-4 w-4" />
-                            Excluir Projeto
-                          </DropdownMenuItem>
-                        </DialogTrigger>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-
-                    {dialogType === DialogType.Edit && (
-                      <EditProject project={project} />
-                    )}
-
-                    {dialogType === DialogType.Delete && (
-                      <DeleteProject project={project} />
-                    )}
-                  </Dialog>
-                </div>
+                <ProjectItem project={project} />
               </li>
             ))
           )}

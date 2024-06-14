@@ -1,6 +1,7 @@
 import request from 'supertest'
 import { faker } from '@faker-js/faker'
 import { createAndAuthenticateUser } from '#/utils/create-and-authenticate-user'
+import { TaskStatus } from '@/domain/entities/task'
 import { app } from '../app'
 
 describe('Create Task Controller (e2e)', () => {
@@ -23,6 +24,7 @@ describe('Create Task Controller (e2e)', () => {
       .send({
         title: faker.lorem.word(5),
         description: faker.lorem.paragraph(),
+        status: faker.helpers.enumValue(TaskStatus),
       })
 
     expect(response.statusCode).toEqual(201)

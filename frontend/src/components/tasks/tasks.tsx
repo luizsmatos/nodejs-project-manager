@@ -20,11 +20,20 @@ interface TasksProps {
 
 export function Tasks({ project }: TasksProps) {
   const [searchParams, setSearchParams] = useSearchParams()
+
+  const title = searchParams.get('title')
+  const status = searchParams.get('status')
   const page = z.coerce.number().parse(searchParams.get('page') ?? 1)
 
   const { data: result } = useQuery({
-    queryKey: ['tasks', project.id, page],
-    queryFn: () => listProjectTasks({ projectId: project.id, page }),
+    queryKey: ['tasks', project.id, title, status, page],
+    queryFn: () =>
+      listProjectTasks({
+        projectId: project.id,
+        page,
+        title,
+        status: status === 'all' ? null : status,
+      }),
   })
 
   function handlePaginate(page: number) {

@@ -17,8 +17,13 @@ import { Textarea } from '../ui/textarea'
 
 const projectFormSchema = z.object({
   id: z.string().uuid().optional(),
-  name: z.string().min(3),
-  description: z.string().min(3).max(191),
+  name: z
+    .string()
+    .min(3, { message: 'O nome deve ter no mínimo 3 caracteres' }),
+  description: z
+    .string()
+    .min(3, { message: 'A descrição deve ter no mínimo 3 caracteres' })
+    .max(191, { message: 'A descrição deve ter no máximo 191 caracteres' }),
 })
 
 export type ProjectFormSchema = z.infer<typeof projectFormSchema>
@@ -47,7 +52,7 @@ export function ProjectForm({ initialValues, onSubmit }: ProjectFormProps) {
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem className="grid grid-cols-4 items-center gap-4">
+            <FormItem>
               <FormLabel>Nome</FormLabel>
               <FormControl className="col-span-3">
                 <Input {...field} />
@@ -65,10 +70,10 @@ export function ProjectForm({ initialValues, onSubmit }: ProjectFormProps) {
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem className="grid grid-cols-4 items-center gap-4">
+            <FormItem>
               <FormLabel>Descrição</FormLabel>
               <FormControl className="col-span-3">
-                <Textarea {...field} />
+                <Textarea {...field} className="resize-none" />
               </FormControl>
               <FormMessage>
                 {errors.description && (

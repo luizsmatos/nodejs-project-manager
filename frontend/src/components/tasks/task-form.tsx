@@ -26,9 +26,16 @@ import { Textarea } from '../ui/textarea'
 
 const taskFormSchema = z.object({
   id: z.string().optional(),
-  title: z.string().min(3),
-  description: z.string().min(3).max(191),
-  status: z.nativeEnum(EnumTaskStatus),
+  title: z
+    .string()
+    .min(3, { message: 'O título deve ter no mínimo 3 caracteres' }),
+  description: z
+    .string()
+    .min(3, { message: 'A descrição deve ter no mínimo 3 caracteres' })
+    .max(191, { message: 'A descrição deve ter no máximo 191 caracteres' }),
+  status: z.nativeEnum(EnumTaskStatus, {
+    message: 'O status é inválido',
+  }),
 })
 
 export type TaskFormSchema = z.infer<typeof taskFormSchema>
@@ -58,7 +65,7 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
           control={form.control}
           name="title"
           render={({ field }) => (
-            <FormItem className="grid grid-cols-4 items-center gap-4">
+            <FormItem>
               <FormLabel>Título</FormLabel>
               <FormControl className="col-span-3">
                 <Input {...field} />
@@ -76,7 +83,7 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem className="grid grid-cols-4 items-center gap-4">
+            <FormItem>
               <FormLabel>Descrição</FormLabel>
               <FormControl className="col-span-3">
                 <Textarea {...field} className="resize-none" />
@@ -94,7 +101,7 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
           control={form.control}
           name="status"
           render={({ field }) => (
-            <FormItem className="grid grid-cols-4 items-center gap-4">
+            <FormItem>
               <FormLabel htmlFor="status">Status</FormLabel>
               <FormControl>
                 <Select

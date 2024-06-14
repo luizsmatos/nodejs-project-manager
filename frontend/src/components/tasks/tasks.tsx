@@ -12,6 +12,7 @@ import { Table, TableBody, TableHead, TableHeader, TableRow } from '../ui/table'
 import { CreateTask } from './create-task'
 import { TaskFilters } from './task-filters'
 import { TaskItem } from './task-item'
+import { TaskItemSkeleton } from './task-item-skeleton'
 
 interface TasksProps {
   project: ProjectDTO
@@ -20,7 +21,7 @@ interface TasksProps {
 export function Tasks({ project }: TasksProps) {
   const { title, status, page, setSearchParams } = useTaskQuery()
 
-  const { data: result } = useQuery({
+  const { data: result, isLoading } = useQuery({
     queryKey: ['tasks', project.id, page, title, status],
     queryFn: () =>
       listProjectTasks({
@@ -75,6 +76,8 @@ export function Tasks({ project }: TasksProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
+              {isLoading && <TaskItemSkeleton />}
+
               {result &&
                 result.tasks.map((task) => (
                   <TaskItem key={task.id} task={task} />

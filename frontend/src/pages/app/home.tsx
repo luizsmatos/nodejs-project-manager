@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async'
 import { Tasks } from '@/components/tasks/tasks'
 import { ProjectContext } from '@/context/project-context'
 
-export function Dashboard() {
+export function Home() {
   const { selectedProject } = useContext(ProjectContext)
 
   return (

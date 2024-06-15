@@ -13,7 +13,7 @@ describe('Get User By Id UseCase', () => {
     sut = new GetUserByIdUseCase(inMemoryUsersRepository)
   })
 
-  it('should be able to get the user profile', async () => {
+  it('should be able to get the user', async () => {
     const user = makeUser()
 
     await inMemoryUsersRepository.create(user)
@@ -30,7 +30,7 @@ describe('Get User By Id UseCase', () => {
     expect(inMemoryUsersRepository.items).toHaveLength(1)
   })
 
-  it('should not be possible to get the user profile if it does not exist', async () => {
+  it('should not be possible to get the user if it does not exist', async () => {
     await expect(
       sut.execute({
         userId: 'non-existing-user-id',

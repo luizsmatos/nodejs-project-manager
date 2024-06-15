@@ -10,18 +10,18 @@ import { CreateTask } from './create-task'
 import { columns } from './table/columns'
 import { DataTable } from './table/data-table'
 
-interface TasksProps {
+interface TaskListProps {
   project: ProjectDTO
 }
 
-export function Tasks({ project }: TasksProps) {
+export function TaskList({ project }: TaskListProps) {
   const { data: result, isLoading } = useQuery({
     queryKey: ['tasks', project.id],
     queryFn: () => listProjectTasks({ projectId: project.id }),
   })
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex min-h-screen flex-col gap-6">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">{project.name}</h1>
         <p className="text-lg text-muted-foreground">{project.description}</p>

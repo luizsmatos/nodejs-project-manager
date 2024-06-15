@@ -4,7 +4,6 @@ import cookieParser from 'cookie-parser'
 import express from 'express'
 import helmet from 'helmet'
 
-import { env } from '../config/env'
 import { errorHandler } from './middlewares/error-handler'
 import { routes } from './routes'
 
@@ -19,13 +18,7 @@ app.use(
     credentials: true,
     allowedHeaders: ['Content-Type'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    origin: (origin, callback) => {
-      if (env.NODE_ENV === 'development') {
-        return callback(null, true)
-      }
-
-      return callback(null, true)
-    },
+    origin: '*',
   }),
 )
 app.options('*', cors())

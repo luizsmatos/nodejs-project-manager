@@ -24,6 +24,7 @@ export async function authenticateUserController(
   response.cookie('access_token', accessToken, {
     httpOnly: true,
     secure: true,
+    sameSite: 'none',
   })
 
   return response.send()

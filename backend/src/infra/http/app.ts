@@ -6,7 +6,6 @@ import helmet from 'helmet'
 
 import { errorHandler } from './middlewares/error-handler'
 import { routes } from './routes'
-import { env } from '../config/env'
 
 const app = express()
 
@@ -21,21 +20,10 @@ app.use(
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     origin: (origin, callback) => {
       if (!origin) {
-        return callback(null, true)
+        return callback(null, false)
       }
 
-      if (env.NODE_ENV === 'development') {
-        return callback(null, true)
-      }
-
-      const allowedOrigins = ['https://project-manager-ui.onrender.com/']
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const message =
-          'The CORS policy for this site does not allow access from the specified Origin.'
-        return callback(new Error(message))
-      }
-
-      return callback(new Error('Not allowed by CORS'))
+      return callback(null, true)
     },
   }),
 )

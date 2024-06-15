@@ -3,7 +3,6 @@ import { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 
 import { Header } from '@/components/header'
-import { SideBar } from '@/components/sidebar'
 import { api } from '@/lib/axios'
 
 export function AppLayout() {
@@ -32,12 +31,8 @@ export function AppLayout() {
     <div className="flex min-h-screen flex-col antialiased">
       <Header />
 
-      <div className="flex flex-1">
-        <SideBar />
-
-        <div className="flex-1 gap-4 p-8 pt-6">
-          <Outlet />
-        </div>
+      <div className="bg-muted/30 p-8 pt-6">
+        <Outlet />
       </div>
     </div>
   )

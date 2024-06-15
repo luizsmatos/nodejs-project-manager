@@ -48,9 +48,7 @@ export function Tasks({ project }: TasksProps) {
       </div>
 
       <div className="space-y-2.5">
-        <div className="flex justify-between">
-          <TaskFilters />
-
+        <div className="flex items-center justify-end gap-2">
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline">
@@ -61,21 +59,23 @@ export function Tasks({ project }: TasksProps) {
 
             <CreateTask project={project} />
           </Dialog>
+
+          <TaskFilters />
         </div>
 
-        <div className="rounded-md border">
-          <Table>
+        <div className="relative rounded-md border">
+          <Table className="relative">
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[64px]"></TableHead>
+                <TableHead className="lg:w-[64px]"></TableHead>
                 <TableHead>Elemento</TableHead>
-                <TableHead className="w-[140px]">Pessoa</TableHead>
-                <TableHead className="w-[140px]">Status</TableHead>
-                <TableHead className="w-[140px]">Data</TableHead>
-                <TableHead className="w-[180px]">Ações</TableHead>
+                <TableHead className="lg:w-[140px]">Pessoa</TableHead>
+                <TableHead className="lg:w-[140px]">Status</TableHead>
+                <TableHead className="lg:w-[140px]">Data</TableHead>
+                <TableHead className="lg:w-[180px]">Ações</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="divide-gray-200 dark:divide-gray-700">
               {isLoading && <TaskItemSkeleton />}
 
               {result &&

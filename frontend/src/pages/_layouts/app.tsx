@@ -14,6 +14,11 @@ export function AppLayout() {
       (error) => {
         if (isAxiosError(error)) {
           const status = error.response?.status
+          const code = error.code
+
+          if (code === 'ERR_NETWORK') {
+            navigate('/login', { replace: true })
+          }
 
           if (status === 401) {
             navigate('/login', { replace: true })

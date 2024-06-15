@@ -1,7 +1,9 @@
+import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
 import { TaskDTO } from '@/api/dtos/task-dto'
+import { getUserById } from '@/api/get-user-by-id'
 
 import {
   DialogContent,
@@ -17,6 +19,21 @@ interface TaskDetailsProps {
 }
 
 export function TaskDetails({ task }: TaskDetailsProps) {
+  function CompletedBy({ completedBy }: { completedBy: string | null }) {
+    const { data: user } = useQuery({
+      queryKey: [completedBy],
+      queryFn: completedBy
+        ? () => getUserById({ userId: completedBy })
+        : undefined,
+    })
+
+    if (!user) {
+      return <div className="font-medium">-</div>
+    }
+
+    return <div className="font-medium">{user.name}</div>
+  }
+
   return (
     <>
       <DialogContent>
@@ -40,7 +57,7 @@ export function TaskDetails({ task }: TaskDetailsProps) {
                   Responsável
                 </TableCell>
                 <TableCell className="flex justify-end">
-                  {task.completedBy ?? '-'}
+                  <CompletedBy completedBy={task.completedBy} />
                 </TableCell>
               </TableRow>
 

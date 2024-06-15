@@ -17,11 +17,11 @@ export function AppLayout() {
           const code = error.code
 
           if (code === 'ERR_NETWORK') {
-            navigate('/login', { replace: true })
+            navigate('/', { replace: true })
           }
 
           if (status === 401) {
-            navigate('/login', { replace: true })
+            navigate('/', { replace: true })
           }
         }
       },

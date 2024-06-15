@@ -12,19 +12,19 @@ import { Error } from './pages/error'
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <AppLayout />,
-    errorElement: <Error />,
+    element: <AuthLayout />,
     children: [
-      { path: '/', element: <Home /> },
-      { path: '/boards/:projectId', element: <Tasks /> },
+      { path: '/', element: <Login /> },
+      { path: '/register', element: <Register /> },
     ],
   },
   {
     path: '/',
-    element: <AuthLayout />,
+    element: <AppLayout />,
+    errorElement: <Error />,
     children: [
-      { path: 'login', element: <Login /> },
-      { path: 'register', element: <Register /> },
+      { path: '/boards', element: <Home /> },
+      { path: '/boards/:projectId', element: <Tasks /> },
     ],
   },
   {

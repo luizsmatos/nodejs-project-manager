@@ -45,7 +45,7 @@ export function Register() {
       toast.success('Conta criada com sucesso!', {
         action: {
           label: 'Fazer login',
-          onClick: () => navigate('/login'),
+          onClick: () => navigate('/'),
         },
       })
     } catch (error) {

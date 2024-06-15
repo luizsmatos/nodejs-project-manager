@@ -29,7 +29,7 @@ export function AccountMenu() {
   const { mutateAsync: logoutFn, isPending: isComingOut } = useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      navigate('/login', { replace: true })
+      navigate('/', { replace: true })
     },
   })
 

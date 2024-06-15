@@ -24,7 +24,7 @@ app.use(
         return callback(null, true)
       }
 
-      return callback(null, false)
+      return callback(null, true)
     },
   }),
 )

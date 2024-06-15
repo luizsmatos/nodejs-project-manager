@@ -14,8 +14,8 @@ import { ProjectFilters } from './project-filters'
 import { ProjectItem } from './project-item'
 
 export function Projects() {
-  const { setSelectedProject } = useContext(ProjectContext)
   const { name } = useProjectQuery()
+  const { setSelectedProject } = useContext(ProjectContext)
 
   const { data: result, isLoading: isLoadingProjects } = useQuery({
     queryKey: ['projects', name],
@@ -30,16 +30,18 @@ export function Projects() {
   }, [result, setSelectedProject])
 
   return (
-    <div className="flex flex-col gap-6">
-      <ProjectFilters />
-
+    <div className="flex flex-col gap-6 lg:w-[320px]">
       <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline" className="w-full">
-            <PlusIcon className="mr-2 h-4 w-4" />
-            Novo Projeto
-          </Button>
-        </DialogTrigger>
+        <div className="flex items-center gap-2">
+          <DialogTrigger asChild>
+            <Button variant="outline" className="w-full">
+              <PlusIcon className="mr-2 h-4 w-4" />
+              Novo Projeto
+            </Button>
+          </DialogTrigger>
+
+          <ProjectFilters />
+        </div>
 
         <CreateProject />
       </Dialog>

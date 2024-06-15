@@ -16,24 +16,24 @@ export function TaskItemSkeleton() {
         </TableCell>
 
         <TableCell>
-          <Skeleton className="h-4 w-[192px]" />
+          <Skeleton className="h-4 lg:w-[192px]" />
         </TableCell>
 
         <TableCell>
-          <Skeleton className="h-4 w-[110px]" />
+          <Skeleton className="h-4 lg:w-[110px]" />
         </TableCell>
 
         <TableCell>
-          <Skeleton className="h-4 w-[110px]" />
+          <Skeleton className="h-4 lg:w-[110px]" />
         </TableCell>
 
         <TableCell>
-          <Skeleton className="h-4 w-[110px]" />
+          <Skeleton className="h-4 lg:w-[110px]" />
         </TableCell>
 
         <TableCell className="flex items-center gap-1">
-          <Skeleton className="h-8 w-[32px]" />
-          <Skeleton className="h-8 w-[32px]" />
+          <Skeleton className="h-8 lg:w-[32px]" />
+          <Skeleton className="h-8 lg:w-[32px]" />
         </TableCell>
       </TableRow>
     )

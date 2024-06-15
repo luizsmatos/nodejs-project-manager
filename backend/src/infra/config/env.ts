@@ -7,7 +7,8 @@ const envSchema = z.object({
     .default('development'),
   PORT: z.coerce.number().default(3333),
   JWT_SECRET: z.string(),
-  DATABASE_URL: z.string().url(),
+  POSTGRES_PRISMA_URL: z.string().url(),
+  POSTGRES_URL_NON_POOLING: z.string().url().optional(),
 })
 
 const _env = envSchema.safeParse(process.env)

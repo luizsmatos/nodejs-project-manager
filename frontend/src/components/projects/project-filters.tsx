@@ -66,7 +66,7 @@ export function ProjectFilters() {
 
       <SheetContent
         side="right"
-        className="xs:w-full flex flex-col gap-4 p-4 dark:bg-gray-800 sm:w-80 md:w-80 lg:w-96 lg:gap-6 lg:p-6 xl:w-96"
+        className="xs:w-full flex flex-col gap-4 p-4 sm:w-80 md:w-80 lg:w-96 lg:gap-6 lg:p-6 xl:w-96"
       >
         <Form {...form}>
           <form
@@ -83,7 +83,7 @@ export function ProjectFilters() {
                     <Input
                       {...field}
                       placeholder="Digite o nome do projeto"
-                      className="border-none bg-gray-200 text-sm focus:ring-0 dark:bg-gray-700"
+                      className="border-none text-sm focus:ring-0"
                     />
                   </FormControl>
                 </FormItem>

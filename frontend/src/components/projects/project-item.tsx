@@ -32,7 +32,7 @@ export function ProjectItem({ project }: ProjectItemsProps) {
     <div className="flex items-center justify-between p-0.5">
       <Button
         variant="ghost"
-        className={`w-full justify-start text-gray-600 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 ${
+        className={`w-full justify-start hover:bg-gray-200 dark:hover:bg-gray-700 ${
           selectedProject?.id === project.id
             ? 'bg-gray-200 dark:bg-gray-700'
             : ''
@@ -49,7 +49,7 @@ export function ProjectItem({ project }: ProjectItemsProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              className="hover:text-gray-900 dark:hover:text-white"
             >
               <MoveHorizontalIcon className="h-4 w-4" />
             </Button>

@@ -24,7 +24,7 @@ NODE_ENV="development"
 PORT=3333
 
 # Configurações do Banco de Dados
-POSTGRES_PRISMA_URL="file:./dev.db"
+POSTGRES_PRISMA_URL="postgresql://docker:docker@localhost:5432/project-manager"
 
 # Configurações do JWT
 JWT_SECRET="your-secret"

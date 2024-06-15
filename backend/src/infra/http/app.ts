@@ -6,9 +6,7 @@ import helmet from 'helmet'
 
 import { env } from '../config/env'
 import { errorHandler } from './middlewares/error-handler'
-import { usersRouter } from './routes/users-routes'
-import { projectsRouter } from './routes/projects-routes'
-import { tasksRouter } from './routes/tasks-routes'
+import { routes } from './routes'
 
 const app = express()
 
@@ -35,9 +33,7 @@ app.options('*', cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.use(usersRouter)
-app.use(projectsRouter)
-app.use(tasksRouter)
+app.use('/api', routes)
 
 app.use(errorHandler)
 

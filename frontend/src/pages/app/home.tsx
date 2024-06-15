@@ -1,26 +1,12 @@
-import { useContext } from 'react'
 import { Helmet } from 'react-helmet-async'
 
-import { Tasks } from '@/components/tasks/tasks'
-import { ProjectContext } from '@/context/project-context'
+import { ProjectList } from '@/components/projects/project-list'
 
 export function Home() {
-  const { selectedProject } = useContext(ProjectContext)
-
   return (
-    <>
-      <Helmet title={selectedProject?.name || 'Home'} />
-      {selectedProject ? (
-        <Tasks project={selectedProject} />
-      ) : (
-        <>
-          <div className="flex h-full items-center justify-center">
-            <p className="text-lg text-muted-foreground">
-              Selecione um projeto para começar
-            </p>
-          </div>
-        </>
-      )}
-    </>
+    <div className="flex-1">
+      <Helmet title="Home" />
+      <ProjectList />
+    </div>
   )
 }

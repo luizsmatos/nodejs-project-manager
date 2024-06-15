@@ -29,13 +29,6 @@ export function TaskDetails({ task }: TaskDetailsProps) {
           <Table>
             <TableBody>
               <TableRow>
-                <TableCell className="text-muted-foreground">Pessoa</TableCell>
-                <TableCell className="flex justify-end">
-                  {task.completedBy}
-                </TableCell>
-              </TableRow>
-
-              <TableRow>
                 <TableCell className="text-muted-foreground">Status</TableCell>
                 <TableCell className="flex justify-end">
                   <TaskStatus status={task.status} />
@@ -43,13 +36,22 @@ export function TaskDetails({ task }: TaskDetailsProps) {
               </TableRow>
 
               <TableRow>
-                <TableCell className="text-muted-foreground">Data</TableCell>
+                <TableCell className="text-muted-foreground">
+                  Responsável
+                </TableCell>
+                <TableCell className="flex justify-end">
+                  {task.completedBy ?? '-'}
+                </TableCell>
+              </TableRow>
+
+              <TableRow>
+                <TableCell className="text-muted-foreground">
+                  Data de criação
+                </TableCell>
                 <TableCell className="flex justify-end">
                   {format(task.createdAt, 'PP', { locale: ptBR })}
                 </TableCell>
               </TableRow>
-
-              {/* concluida em */}
 
               <TableRow>
                 <TableCell className="text-muted-foreground">
@@ -58,7 +60,7 @@ export function TaskDetails({ task }: TaskDetailsProps) {
                 <TableCell className="flex justify-end">
                   {task.completedAt
                     ? format(task.completedAt, 'PP', { locale: ptBR })
-                    : ''}
+                    : '-'}
                 </TableCell>
               </TableRow>
             </TableBody>

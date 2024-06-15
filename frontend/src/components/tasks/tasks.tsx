@@ -3,42 +3,22 @@ import { PlusIcon } from 'lucide-react'
 
 import { ProjectDTO } from '@/api/dtos/project-dto'
 import { listProjectTasks } from '@/api/list-project-tasks'
-import { useTaskQuery } from '@/hooks/use-task-query'
 
-import { Pagination } from '../pagination'
 import { Button } from '../ui/button'
 import { Dialog, DialogTrigger } from '../ui/dialog'
-import { Table, TableBody, TableHead, TableHeader, TableRow } from '../ui/table'
 import { CreateTask } from './create-task'
-import { TaskFilters } from './task-filters'
-import { TaskItem } from './task-item'
-import { TaskItemSkeleton } from './task-item-skeleton'
+import { columns } from './table/columns'
+import { DataTable } from './table/data-table'
 
 interface TasksProps {
   project: ProjectDTO
 }
 
 export function Tasks({ project }: TasksProps) {
-  const { title, status, page, setSearchParams } = useTaskQuery()
-
   const { data: result, isLoading } = useQuery({
-    queryKey: ['tasks', project.id, page, title, status],
-    queryFn: () =>
-      listProjectTasks({
-        projectId: project.id,
-        page,
-        title,
-        status: status === 'all' ? null : status,
-      }),
+    queryKey: ['tasks', project.id],
+    queryFn: () => listProjectTasks({ projectId: project.id }),
   })
-
-  function handlePaginate(page: number) {
-    setSearchParams((prev) => {
-      prev.set('page', page.toString())
-
-      return prev
-    })
-  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -47,53 +27,23 @@ export function Tasks({ project }: TasksProps) {
         <p className="text-lg text-muted-foreground">{project.description}</p>
       </div>
 
-      <div className="space-y-2.5">
-        <div className="flex items-center justify-end gap-2">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline">
-                <PlusIcon className="mr-2 h-4 w-4" />
-                Criar Tarefa
-              </Button>
-            </DialogTrigger>
+      <div className="flex flex-1 flex-col space-y-4">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline" className="w-fit">
+              <PlusIcon className="mr-2 h-4 w-4" />
+              Criar Tarefa
+            </Button>
+          </DialogTrigger>
 
-            <CreateTask project={project} />
-          </Dialog>
+          <CreateTask project={project} />
+        </Dialog>
 
-          <TaskFilters />
-        </div>
-
-        <div className="relative rounded-md border">
-          <Table className="relative">
-            <TableHeader>
-              <TableRow>
-                <TableHead className="lg:w-[64px]"></TableHead>
-                <TableHead>Elemento</TableHead>
-                <TableHead className="lg:w-[140px]">Pessoa</TableHead>
-                <TableHead className="lg:w-[140px]">Status</TableHead>
-                <TableHead className="lg:w-[140px]">Data</TableHead>
-                <TableHead className="lg:w-[180px]">Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody className="divide-gray-200 dark:divide-gray-700">
-              {isLoading && <TaskItemSkeleton />}
-
-              {result &&
-                result.tasks.map((task) => (
-                  <TaskItem key={task.id} task={task} />
-                ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        {result && (
-          <Pagination
-            page={result.meta.page}
-            totalCount={result.meta.totalCount}
-            perPage={result.meta.perPage}
-            onPageChange={handlePaginate}
-          />
-        )}
+        <DataTable
+          columns={columns}
+          data={result?.tasks ?? []}
+          isDataLoading={isLoading}
+        />
       </div>
     </div>
   )

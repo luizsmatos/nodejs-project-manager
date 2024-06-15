@@ -4,7 +4,6 @@ import { toast } from 'sonner'
 import { TaskDTO } from '@/api/dtos/task-dto'
 import { editTask } from '@/api/edit-task'
 import { ListProjectTasksResponse } from '@/api/list-project-tasks'
-import { useTaskQuery } from '@/hooks/use-task-query'
 
 import {
   DialogContent,
@@ -16,17 +15,16 @@ import { TaskForm, TaskFormSchema } from './task-form'
 
 interface EditTaskProps {
   task: TaskDTO
+  onClose: () => void
 }
 
-export function EditTask({ task }: EditTaskProps) {
-  const { title, status, page } = useTaskQuery()
-
+export function EditTask({ task, onClose }: EditTaskProps) {
   const queryClient = useQueryClient()
 
   const { mutateAsync: editTaskFn } = useMutation({
     mutationFn: editTask,
     onSuccess(updatedTask) {
-      const keys = ['tasks', task.projectId, page, title, status]
+      const keys = ['tasks', task.projectId]
       const previousTasks =
         queryClient.getQueryData<ListProjectTasksResponse>(keys)
 
@@ -50,9 +48,10 @@ export function EditTask({ task }: EditTaskProps) {
         status: data.status,
       })
 
-      toast.success('Projeto editado com sucesso!')
+      toast.success('Tarefa editada com sucesso!')
+      onClose()
     } catch {
-      toast.error('Falha ao editar o projeto, tente novamente!')
+      toast.error('Erro ao editar a tarefa, tente novamente!')
     }
   }
 

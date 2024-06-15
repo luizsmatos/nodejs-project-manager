@@ -4,7 +4,6 @@ import { toast } from 'sonner'
 import { createTask } from '@/api/create-task'
 import { ProjectDTO } from '@/api/dtos/project-dto'
 import { ListProjectTasksResponse } from '@/api/list-project-tasks'
-import { useTaskQuery } from '@/hooks/use-task-query'
 
 import {
   DialogContent,
@@ -19,14 +18,12 @@ interface CreateTaskProps {
 }
 
 export function CreateTask({ project }: CreateTaskProps) {
-  const { title, status, page } = useTaskQuery()
-
   const queryClient = useQueryClient()
 
   const { mutateAsync: createTaskFn } = useMutation({
     mutationFn: createTask,
     onSuccess(newTask) {
-      const keys = ['tasks', project.id, page, title, status]
+      const keys = ['tasks', project.id]
       const previousTasks =
         queryClient.getQueryData<ListProjectTasksResponse>(keys)
 
@@ -53,7 +50,7 @@ export function CreateTask({ project }: CreateTaskProps) {
   }
 
   return (
-    <DialogContent className="sm:max-w-[425px]">
+    <DialogContent>
       <DialogHeader>
         <DialogTitle>Nova Tarefa</DialogTitle>
         <DialogDescription>Preencha os campos abaixo.</DialogDescription>

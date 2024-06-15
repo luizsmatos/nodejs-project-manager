@@ -4,7 +4,6 @@ import { toast } from 'sonner'
 import { deleteTask } from '@/api/delete-task'
 import { TaskDTO } from '@/api/dtos/task-dto'
 import { ListProjectTasksResponse } from '@/api/list-project-tasks'
-import { useTaskQuery } from '@/hooks/use-task-query'
 
 import { Button } from '../ui/button'
 import {
@@ -18,17 +17,16 @@ import {
 
 interface DeleteTaskProps {
   task: TaskDTO
+  onClose: () => void
 }
 
-export function DeleteTask({ task }: DeleteTaskProps) {
-  const { title, status, page } = useTaskQuery()
-
+export function DeleteTask({ task, onClose }: DeleteTaskProps) {
   const queryClient = useQueryClient()
 
   const { mutateAsync: deleteTaskFn, isPending } = useMutation({
     mutationFn: deleteTask,
     onSuccess(_data, { taskId }) {
-      const keys = ['tasks', task.projectId, page, title, status]
+      const keys = ['tasks', task.projectId]
       const previousTasks =
         queryClient.getQueryData<ListProjectTasksResponse>(keys)
 
@@ -46,6 +44,7 @@ export function DeleteTask({ task }: DeleteTaskProps) {
       await deleteTaskFn({ taskId })
 
       toast.success('Tarefa excluída com sucesso!')
+      onClose()
     } catch {
       toast.error('Erro ao excluir a tarefa, tente novamente!')
     }

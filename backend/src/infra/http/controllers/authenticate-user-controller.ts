@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
 import { makeAuthenticateUserUseCase } from '@/domain/use-cases/factories/make-authenticate-user-usecase'
-import { env } from '@/infra/config/env'
 
 export async function authenticateUserController(
   request: Request,
@@ -24,8 +23,7 @@ export async function authenticateUserController(
 
   response.cookie('access_token', accessToken, {
     httpOnly: true,
-    secure: env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: true,
   })
 
   return response.send()

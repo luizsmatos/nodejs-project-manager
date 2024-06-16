@@ -8,12 +8,19 @@ import { z } from 'zod'
 
 import { authenticateUser } from '@/api/authenticate-user'
 import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 
 const loginFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
+  email: z.string().email({ message: 'E-mail inválido' }),
+  password: z.string(),
 })
 
 type LoginFormSchema = z.infer<typeof loginFormSchema>
@@ -21,13 +28,15 @@ type LoginFormSchema = z.infer<typeof loginFormSchema>
 export function Login() {
   const navigate = useNavigate()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<LoginFormSchema>({
+  const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   })
+
+  const { isSubmitting, errors } = form.formState
 
   const { mutateAsync: authenticateUserFn } = useMutation({
     mutationFn: authenticateUser,
@@ -58,21 +67,47 @@ export function Login() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
-            <div>
-              <Label htmlFor="email">Seu e-mail</Label>
-              <Input id="email" type="email" {...register('email')} />
-            </div>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleLogin)}
+              className="space-y-4"
+            >
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Seu e-mail</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage>
+                      {errors.email && (
+                        <p className="text-red-500">{errors.email.message}</p>
+                      )}
+                    </FormMessage>
+                  </FormItem>
+                )}
+              />
 
-            <div>
-              <Label htmlFor="password">Sua senha</Label>
-              <Input id="password" type="password" {...register('password')} />
-            </div>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Sua senha</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
-            <Button disabled={isSubmitting} className="w-full" type="submit">
-              Acessar painel
-            </Button>
-          </form>
+              <Button disabled={isSubmitting} className="w-full" type="submit">
+                Acessar painel
+              </Button>
+            </form>
+          </Form>
 
           <div className="flex flex-col gap-2 text-center">
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">

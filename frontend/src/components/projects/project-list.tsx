@@ -57,7 +57,7 @@ export function ProjectList() {
         <CreateProject />
       </Dialog>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-6 lg:grid-cols-4 xl:grid-cols-5">
         {isLoadingProjects ? (
           <>
             {Array.from({ length: 20 }).map((_, index) => {

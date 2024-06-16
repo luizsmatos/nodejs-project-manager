@@ -8,13 +8,22 @@ import { z } from 'zod'
 
 import { registerUser } from '@/api/register-user'
 import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 
 const registerFormSchema = z.object({
-  name: z.string().min(3),
-  email: z.string().email(),
-  password: z.string().min(6),
+  name: z.string().min(3, { message: 'Nome muito curto' }),
+  email: z.string().email({ message: 'E-mail inválido' }),
+  password: z
+    .string()
+    .min(6, { message: 'Sua senha deve ter no mínimo 6 caracteres' }),
 })
 
 type RegisterFormSchema = z.infer<typeof registerFormSchema>
@@ -22,13 +31,16 @@ type RegisterFormSchema = z.infer<typeof registerFormSchema>
 export function Register() {
   const navigate = useNavigate()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<RegisterFormSchema>({
+  const form = useForm<RegisterFormSchema>({
     resolver: zodResolver(registerFormSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+    },
   })
+
+  const { isSubmitting, errors } = form.formState
 
   const { mutateAsync: registerUserFn } = useMutation({
     mutationFn: registerUser,
@@ -67,38 +79,84 @@ export function Register() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(handleRegister)} className="space-y-4">
-            <div>
-              <Label htmlFor="name">Seu nome</Label>
-              <Input id="name" type="text" {...register('name')} />
-            </div>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleRegister)}
+              className="space-y-4"
+            >
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Seu nome</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage>
+                      {errors.name && (
+                        <p className="text-red-500">{errors.name.message}</p>
+                      )}
+                    </FormMessage>
+                  </FormItem>
+                )}
+              />
 
-            <div>
-              <Label htmlFor="email">Seu e-mail</Label>
-              <Input id="email" type="email" {...register('email')} />
-            </div>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Seu e-mail</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage>
+                      {errors.email && (
+                        <p className="text-red-500">{errors.email.message}</p>
+                      )}
+                    </FormMessage>
+                  </FormItem>
+                )}
+              />
 
-            <div>
-              <Label htmlFor="password">Sua senha</Label>
-              <Input id="password" type="password" {...register('password')} />
-            </div>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Sua senha</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                    <FormMessage>
+                      {errors.password && (
+                        <p className="text-red-500">
+                          {errors.password.message}
+                        </p>
+                      )}
+                    </FormMessage>
+                  </FormItem>
+                )}
+              />
 
-            <Button disabled={isSubmitting} className="w-full" type="submit">
-              Finalizar Cadastro
-            </Button>
+              <Button disabled={isSubmitting} className="w-full" type="submit">
+                Finalizar Cadastro
+              </Button>
 
-            <div className="flex flex-col gap-2 text-center">
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                Já tem uma conta?{' '}
-                <Link
-                  className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-500 dark:hover:text-indigo-400"
-                  to="/login"
-                >
-                  Fazer login
-                </Link>
-              </p>
-            </div>
-          </form>
+              <div className="flex flex-col gap-2 text-center">
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  Já tem uma conta?{' '}
+                  <Link
+                    className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-500 dark:hover:text-indigo-400"
+                    to="/login"
+                  >
+                    Fazer login
+                  </Link>
+                </p>
+              </div>
+            </form>
+          </Form>
         </div>
       </div>
     </>

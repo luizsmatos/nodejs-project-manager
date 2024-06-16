@@ -10,13 +10,15 @@ export function Header() {
     <div className="border-b">
       <header className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-4">
-          <ListTodo className="h-6 w-6" />
-          <h1 className="text-2xl font-bold">Project Manager</h1>
+          <ListTodo className="h-5 w-5" />
 
           <Separator orientation="vertical" className="h-6" />
 
           <nav className="flex items-center space-x-4 lg:space-x-6">
-            <Link to="/boards" className="flex items-center justify-start gap-2">
+            <Link
+              to="/boards"
+              className="flex items-center justify-start gap-2 rounded-md px-2 py-1"
+            >
               <Home className="h-4 w-4" />
               Início
             </Link>

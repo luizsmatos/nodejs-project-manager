@@ -3,7 +3,7 @@ FROM node:20-alpine AS dependencies
 WORKDIR /app
 COPY package*.json ./
 COPY ./prisma prisma
-RUN npm ci
+RUN npm ci --loglevel verbose
 
 # Etapa de construção do código
 FROM dependencies AS builder

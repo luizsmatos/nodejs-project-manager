@@ -3,6 +3,76 @@ import { z } from 'zod'
 import { makeListProjectTasksUseCase } from '@/domain/use-cases/factories/make-list-project-tasks-usecase'
 import { TaskStatus } from '@/domain/entities/task'
 
+/**
+ * @swagger
+ * /api/projects/{projectId}/tasks:
+ *   get:
+ *     security:
+ *       - cookieAuth: []
+ *     tags:
+ *       - Tasks
+ *     summary: List project tasks
+ *     parameters:
+ *       - in: path
+ *         name: projectId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [PENDING, IN_PROGRESS, DONE]
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 tasks:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Task'
+ *                 meta:
+ *                   type: object
+ *                   properties:
+ *                     totalItems:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *                     currentPage:
+ *                       type: integer
+ *                     nextPage:
+ *                       type: integer
+ *                     prevPage:
+ *                       type: integer
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
+ */
+
 export async function listProjectTasksController(
   request: Request,
   response: Response,

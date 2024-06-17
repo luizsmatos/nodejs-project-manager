@@ -2,6 +2,28 @@ import { Request, Response } from 'express'
 import { makeGetUserProfileUseCase } from '@/domain/use-cases/factories/make-get-user-profile-usecase'
 import { UserPresenter } from './presenters/user-presenter'
 
+/**
+ * @swagger
+ * /api/users/me:
+ *   get:
+ *     security:
+ *       - cookieAuth: []
+ *     tags:
+ *       - Users
+ *     summary: Get user profile
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   $ref: '#/components/schemas/User'
+ */
+
 export async function getUserProfileController(
   request: Request,
   response: Response,

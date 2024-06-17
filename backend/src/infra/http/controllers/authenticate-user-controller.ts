@@ -2,6 +2,44 @@ import { Request, Response } from 'express'
 import { z } from 'zod'
 import { makeAuthenticateUserUseCase } from '@/domain/use-cases/factories/make-authenticate-user-usecase'
 
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     tags:
+ *       - Users
+ *     summary: Authenticate a user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             required:
+ *               - email
+ *               - password
+ *     responses:
+ *       200:
+ *         description: OK
+ *         headers:
+ *           access_token:
+ *             description: Access token
+ *             schema:
+ *               type: string
+ *             example: access_token=eyJ; Path=/; HttpOnly; Secure; SameSite=None
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ */
+
 export async function authenticateUserController(
   request: Request,
   response: Response,

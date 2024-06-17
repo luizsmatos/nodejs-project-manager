@@ -3,6 +3,61 @@ import { z } from 'zod'
 import { makeCreateTaskUseCase } from '@/domain/use-cases/factories/make-create-task-usecase'
 import { TaskStatus } from '@/domain/entities/task'
 
+/**
+ * @swagger
+ * /api/projects/{projectId}/tasks:
+ *   post:
+ *     security:
+ *       - cookieAuth: []
+ *     tags:
+ *       - Tasks
+ *     summary: Create task
+ *     parameters:
+ *       - in: path
+ *         name: projectId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *                 enum: [todo, doing, done]
+ *     responses:
+ *       201:
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 task:
+ *                   type: object
+ *                   $ref: '#/components/schemas/Task'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
+ */
+
 export async function createTaskController(
   request: Request,
   response: Response,

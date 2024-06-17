@@ -2,6 +2,58 @@ import { Request, Response } from 'express'
 import { z } from 'zod'
 import { makeEditProjectUseCase } from '@/domain/use-cases/factories/make-edit-project-usecase'
 
+/**
+ * @swagger
+ * /api/projects/{projectId}:
+ *   put:
+ *     security:
+ *       - cookieAuth: []
+ *     tags:
+ *       - Projects
+ *     summary: Edit project
+ *     parameters:
+ *       - in: path
+ *         name: projectId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 project:
+ *                   type: object
+ *                   $ref: '#/components/schemas/Project'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationError'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
+ */
+
 export async function editProjectController(
   request: Request,
   response: Response,

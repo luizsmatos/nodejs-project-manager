@@ -90,6 +90,14 @@ cd backend
 npm run start:dev
 ```
 
+### Documentação da API
+
+A documentação da API está disponível via Swagger. Para acessá-la, execute o seguinte comando e visite o link fornecido:
+
+```bash
+http://localhost:3333/api/docs
+```
+
 ### Frontend
 
 Para iniciar o servidor de desenvolvimento do frontend:
@@ -124,6 +132,8 @@ Este projeto inclui um arquivo `docker-compose.yml` para execução da aplicaç�
 ```bash
 docker-compose up -d --build
 ```
+
+Neste ponto, você deve ter uma instância funcional para brincar em `http://localhost:8080/` dentro de alguns instantes.
 
 ### Parando os Serviços Docker
 

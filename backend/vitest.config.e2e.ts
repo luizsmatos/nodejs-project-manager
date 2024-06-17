@@ -7,6 +7,12 @@ export default defineConfig({
     globals: true,
     root: './',
     environmentMatchGlobs: [['src/infra/http/controllers/**', 'prisma']],
+    poolOptions: {
+      threads: {
+        minThreads: 1,
+        maxThreads: 3,
+      },
+    },
   },
   plugins: [tsConfigPaths()],
 })

@@ -8,7 +8,7 @@ describe('Create Project Controller (e2e)', () => {
     const { cookies } = await createAndAuthenticateUser(app)
 
     const response = await request(app)
-      .post('/projects')
+      .post('/api/projects')
       .set('Cookie', cookies)
       .send({
         name: faker.lorem.word(5),
@@ -23,7 +23,7 @@ describe('Create Project Controller (e2e)', () => {
 
   it('should return 401 if no token is provided', async () => {
     const response = await request(app)
-      .post('/projects')
+      .post('/api/projects')
       .send({
         name: faker.lorem.word(5),
         description: faker.lorem.paragraph(),

@@ -3,7 +3,7 @@ import { app } from '../app'
 
 describe('Register User Controller (e2e)', () => {
   it('should return 201 on success', async () => {
-    const response = await request(app).post('/auth/register').send({
+    const response = await request(app).post('/api/auth/register').send({
       name: 'John Doe',
       email: 'johndoe@example.com',
       password: '123456',
@@ -13,7 +13,7 @@ describe('Register User Controller (e2e)', () => {
   })
 
   it('should return 409 if email is already in use', async () => {
-    const response = await request(app).post('/auth/register').send({
+    const response = await request(app).post('/api/auth/register').send({
       name: 'John Doe',
       email: 'johndoe@example.com',
       password: '123456',

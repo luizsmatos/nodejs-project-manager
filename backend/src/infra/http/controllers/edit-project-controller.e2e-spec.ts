@@ -1,27 +1,19 @@
 import request from 'supertest'
 import { faker } from '@faker-js/faker'
+import { ProjectFactory } from '#/factories/make-project'
 import { createAndAuthenticateUser } from '#/utils/create-and-authenticate-user'
 import { app } from '../app'
 
 describe('Edit Project Controller (e2e)', () => {
   it('should return 200 on success', async () => {
-    const { cookies } = await createAndAuthenticateUser(app)
-
-    const createProject = await request(app)
-      .post('/projects')
-      .set('Cookie', cookies)
-      .send({
-        name: faker.lorem.word(5),
-        description: faker.lorem.paragraph(),
-      })
-
-    const projectId = createProject.body.project.id
+    const { cookies, user } = await createAndAuthenticateUser(app)
+    const project = await ProjectFactory.makePrismaProject({ userId: user?.id })
 
     const updateName = faker.lorem.word(5)
     const updateDescription = faker.lorem.paragraph()
 
     const response = await request(app)
-      .put(`/projects/${projectId}`)
+      .put(`/api/projects/${project.id}`)
       .set('Cookie', cookies)
       .send({
         name: updateName,

@@ -7,7 +7,7 @@ describe('Get User Profile Controller (e2e)', () => {
     const { cookies } = await createAndAuthenticateUser(app)
 
     const response = await request(app)
-      .get('/users/me')
+      .get('/api/users/me')
       .set('Cookie', cookies)
       .send()
 

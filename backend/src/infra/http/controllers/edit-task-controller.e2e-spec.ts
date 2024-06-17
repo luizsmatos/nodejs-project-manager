@@ -1,35 +1,22 @@
 import request from 'supertest'
 import { faker } from '@faker-js/faker'
+import { ProjectFactory } from '#/factories/make-project'
+import { TaskFactory } from '#/factories/make-task'
 import { createAndAuthenticateUser } from '#/utils/create-and-authenticate-user'
+import { prisma } from '@/infra/database/prisma/prisma'
 import { app } from '../app'
 
 describe('Edit Task Controller (e2e)', () => {
   it('should return 201 on success', async () => {
     const { cookies } = await createAndAuthenticateUser(app)
 
-    const createProject = await request(app)
-      .post('/projects')
-      .set('Cookie', cookies)
-      .send({
-        name: faker.lorem.word(5),
-        description: faker.lorem.paragraph(),
-      })
+    const user = await prisma.user.findFirst()
+    const project = await ProjectFactory.makePrismaProject({ userId: user?.id })
+    const task = await TaskFactory.makePrismaTask({ projectId: project.id })
 
-    const projectId = createProject.body.project.id
-
-    const createTask = await request(app)
-      .post(`/projects/${projectId}/tasks`)
-      .set('Cookie', cookies)
-      .send({
-        title: faker.lorem.word(5),
-        description: faker.lorem.paragraph(),
-      })
-
-    const taskId = createTask.body.task.id
     const updateTitle = faker.lorem.word(5)
-
     const response = await request(app)
-      .put(`/tasks/${taskId}`)
+      .put(`/api/tasks/${task.id}`)
       .set('Cookie', cookies)
       .send({
         title: updateTitle,

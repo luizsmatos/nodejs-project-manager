@@ -6,6 +6,7 @@ import helmet from 'helmet'
 
 import { errorHandler } from './middlewares/error-handler'
 import { routes } from './routes'
+import { useSwagger } from './middlewares/use-swagger'
 
 const app = express()
 
@@ -31,6 +32,11 @@ app.options('*', cors())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+useSwagger(app)
+app.all('/', (_request, response) => {
+  response.redirect('/api/docs')
+})
 
 app.use('/api', routes)
 

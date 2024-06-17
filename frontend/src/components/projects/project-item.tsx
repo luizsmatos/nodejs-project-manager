@@ -83,7 +83,7 @@ export function ProjectItem({ project }: ProjectItemProps) {
                       <Button
                         variant="ghost"
                         size="xs"
-                        onClick={() => setDialogType(DialogType.UPDATE)}
+                        onClick={() => setDialogType(DialogType.DELETE)}
                       >
                         <Trash className="h-3 w-3 shrink-0" />
                       </Button>

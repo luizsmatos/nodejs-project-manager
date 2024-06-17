@@ -35,6 +35,12 @@ import { makeRegisterUserUseCase } from '@/domain/use-cases/factories/make-regis
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ValidationError'
+ *       409:
+ *         description: Conflict
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserAlreadyExistsError'
  */
 
 export async function registerUserController(

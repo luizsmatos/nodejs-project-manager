@@ -49,15 +49,11 @@ import { TaskStatus } from '@/domain/entities/task'
  *                 meta:
  *                   type: object
  *                   properties:
- *                     totalItems:
+ *                     page:
  *                       type: integer
- *                     totalPages:
+ *                     perPage:
  *                       type: integer
- *                     currentPage:
- *                       type: integer
- *                     nextPage:
- *                       type: integer
- *                     prevPage:
+ *                     totalCount:
  *                       type: integer
  *       400:
  *         description: Bad request

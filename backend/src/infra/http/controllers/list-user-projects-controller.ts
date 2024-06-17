@@ -37,14 +37,18 @@ import { makeListUserProjectsUseCase } from '@/domain/use-cases/factories/make-l
  *                 meta:
  *                   type: object
  *                   properties:
- *                     totalItems:
+ *                     page:
  *                       type: integer
- *                     totalPages:
+ *                     perPage:
  *                       type: integer
- *                     currentPage:
+ *                     totalCount:
  *                       type: integer
- *                     nextPage:
- *                       type: integer
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
  */
 
 export async function listUserProjectsController(

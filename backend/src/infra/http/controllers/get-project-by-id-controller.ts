@@ -41,6 +41,12 @@ import z from 'zod'
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UnauthorizedError'
+ *       404:
+ *         description: Not Found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ProjectNotFound'
  */
 
 export async function getGetProjectByIdController(

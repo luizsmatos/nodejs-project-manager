@@ -56,6 +56,12 @@ import { TaskStatus } from '@/domain/entities/task'
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UnauthorizedError'
+ *       404:
+ *         description: Not Found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TaskNotFound'
  */
 
 export async function editTaskController(

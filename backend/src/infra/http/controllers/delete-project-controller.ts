@@ -33,6 +33,18 @@ import { makeDeleteProjectUseCase } from '@/domain/use-cases/factories/make-dele
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UnauthorizedError'
+ *       403:
+ *         description: Forbidden
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserNotAuthorizedError'
+ *       404:
+ *         description: Not Found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ProjectNotFound'
  */
 
 export async function deleteProjectController(

@@ -22,6 +22,18 @@ import { UserPresenter } from './presenters/user-presenter'
  *                 user:
  *                   type: object
  *                   $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
+ *       404:
+ *         description: Not Found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserNotFoundError'
  */
 
 export async function getUserProfileController(

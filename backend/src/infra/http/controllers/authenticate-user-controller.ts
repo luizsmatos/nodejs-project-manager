@@ -38,6 +38,13 @@ import { makeAuthenticateUserUseCase } from '@/domain/use-cases/factories/make-a
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ValidationError'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/WrongCredentialsError'
+ *
  */
 
 export async function authenticateUserController(

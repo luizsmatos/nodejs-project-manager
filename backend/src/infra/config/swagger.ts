@@ -1,21 +1,4 @@
 import swaggerJsDoc from 'swagger-jsdoc'
-// {
-// 	"timestamp": "2024-06-17T00:47:24.774Z",
-// 	"error": "ZodError",
-// 	"message": {
-// 		"name": "ZodValidationError",
-// 		"details": [
-// 			{
-// 				"validation": "email",
-// 				"code": "invalid_string",
-// 				"message": "Validation error: Invalid email at \"email\"",
-// 				"path": [
-// 					"email"
-// 				]
-// 			}
-// 		]
-// 	}
-// }
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -107,6 +90,102 @@ const swaggerOptions = {
             message: {
               type: 'string',
               example: 'Unauthorized',
+            },
+          },
+        },
+        UserAlreadyExistsError: {
+          type: 'object',
+          properties: {
+            timestamp: {
+              type: 'string',
+              format: 'date-time',
+            },
+            error: {
+              type: 'string',
+            },
+            message: {
+              type: 'string',
+              example: 'User already exists',
+            },
+          },
+        },
+        WrongCredentialsError: {
+          type: 'object',
+          properties: {
+            timestamp: {
+              type: 'string',
+              format: 'date-time',
+            },
+            error: {
+              type: 'string',
+            },
+            message: {
+              type: 'string',
+              example: 'Credentials are invalid',
+            },
+          },
+        },
+        UserNotFoundError: {
+          type: 'object',
+          properties: {
+            timestamp: {
+              type: 'string',
+              format: 'date-time',
+            },
+            error: {
+              type: 'string',
+            },
+            message: {
+              type: 'string',
+              example: 'User not found',
+            },
+          },
+        },
+        UserNotAuthorizedError: {
+          type: 'object',
+          properties: {
+            timestamp: {
+              type: 'string',
+              format: 'date-time',
+            },
+            error: {
+              type: 'string',
+            },
+            message: {
+              type: 'string',
+              example: 'User not authorized',
+            },
+          },
+        },
+        ProjectNotFound: {
+          type: 'object',
+          properties: {
+            timestamp: {
+              type: 'string',
+              format: 'date-time',
+            },
+            error: {
+              type: 'string',
+            },
+            message: {
+              type: 'string',
+              example: 'Project not found',
+            },
+          },
+        },
+        TaskNotFound: {
+          type: 'object',
+          properties: {
+            timestamp: {
+              type: 'string',
+              format: 'date-time',
+            },
+            error: {
+              type: 'string',
+            },
+            message: {
+              type: 'string',
+              example: 'Task not found',
             },
           },
         },
